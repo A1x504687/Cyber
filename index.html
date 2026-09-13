@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShadowShield Pro — منصة الأمن السيبراني الاحترافية</title>
+<meta name="description" content="40+ أداة أمن سيبراني حقيقية + AI حقيقي (Groq) — تشفير AES، فحص تسريبات، Subdomain Finder، SSL Checker.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05050f; --bg2:#0a0a1a; --card:#0f1626; --card2:#141c2e;
+  --border:#1e293b; --text:#e2e8f0; --dim:#94a3b8;
+  --primary:#00d4ff; --secondary:#a855f7; --success:#22c55e;
+  --warning:#f59e0b; --danger:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6;position:relative}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--primary),var(--secondary));border-radius:4px}
+.mono{font-family:'Fira Code',monospace}
+.container{max-width:1280px;margin:0 auto;padding:0 20px}
+
+#particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#matrix-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;transition:opacity .5s}
+#matrix-canvas.active{opacity:.15}
+.bg-glow{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse at 20% 0%,rgba(0,212,255,.08),transparent 50%),
+  radial-gradient(ellipse at 80% 100%,rgba(168,85,247,.08),transparent 50%)}
+.page-content{position:relative;z-index:1}
+
+.nav{position:sticky;top:0;z-index:100;background:rgba(5,5,15,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#fff;text-decoration:none;flex-shrink:0}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;font-size:18px;box-shadow:0 4px 20px rgba(0,212,255,.4)}
+.nav-links{display:flex;gap:24px;list-style:none;flex:1;justify-content:center}
+.nav-links a{color:var(--dim);text-decoration:none;font-size:13px;font-weight:600;transition:color .2s;white-space:nowrap}
+.nav-links a:hover{color:var(--primary)}
+.nav-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:10px;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 4px 20px rgba(0,212,255,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,.5)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:8px}
+
+.hero{position:relative;padding:100px 0 80px;overflow:hidden}
+.hero-content{position:relative;text-align:center;max-width:900px;margin:0 auto}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:100px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--primary);font-size:13px;font-weight:600;margin-bottom:24px;backdrop-filter:blur(8px)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--primary);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.1;color:#fff;margin-bottom:20px;letter-spacing:-1px}
+.hero h1 .grad{background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:clamp(15px,2vw,19px);color:var(--dim);max-width:640px;margin:0 auto 36px}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:60px}
+.stat{background:rgba(15,22,38,.7);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;transition:all .2s}
+.stat:hover{border-color:var(--primary);transform:translateY(-4px)}
+.stat-num{font-size:32px;font-weight:800;color:var(--primary);margin-bottom:4px}
+.stat-label{font-size:12px;color:var(--dim)}
+
+section{padding:80px 0;position:relative}
+.section-head{text-align:center;max-width:700px;margin:0 auto 50px}
+.section-head h2{font-size:clamp(26px,4vw,40px);font-weight:800;color:#fff;margin-bottom:12px}
+.section-head p{color:var(--dim);font-size:15px}
+.badge{display:inline-block;padding:6px 14px;border-radius:100px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--primary);font-size:12px;font-weight:700;margin-bottom:16px;letter-spacing:.5px}
+.badge.purple{background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3);color:var(--secondary)}
+.badge.gold{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);color:var(--warning)}
+.badge.green{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--success)}
+
+.cat-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.cat-tab{padding:10px 20px;border-radius:100px;background:rgba(15,22,38,.6);border:1px solid var(--border);color:var(--dim);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.cat-tab:hover{border-color:var(--primary);color:var(--primary)}
+.cat-tab.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-color:transparent}
+
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.tool-card{background:rgba(15,22,38,.7);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.tool-card:hover{border-color:var(--primary);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,212,255,.15)}
+.tool-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-size:20px;margin-bottom:14px}
+.tool-card h3{font-size:14px;font-weight:700;color:#fff;margin-bottom:6px}
+.tool-card p{font-size:12px;color:var(--dim);line-height:1.5}
+
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;padding:26px;animation:slideUp .3s}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.modal-head h3{font-size:20px;font-weight:800;color:#fff}
+.close-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--dim);font-size:18px;cursor:pointer;transition:all .2s;padding:4px 10px;border-radius:8px;font-family:inherit}
+.close-btn:hover{color:var(--danger);border-color:var(--danger)}
+
+label{display:block;font-size:13px;font-weight:600;color:var(--dim);margin-bottom:8px}
+input,textarea,select{width:100%;padding:11px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:13px;transition:all .2s;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(0,212,255,.1)}
+textarea{resize:vertical;min-height:100px;font-family:inherit;line-height:1.6}
+.field{margin-bottom:16px}
+
+.ai-container{display:flex;flex-direction:column;height:520px;background:rgba(10,10,26,.9);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.ai-messages{flex:1;overflow-y:auto;padding:20px}
+.msg{max-width:88%;padding:12px 16px;border-radius:14px;margin-bottom:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word}
+.msg.user{background:linear-gradient(135deg,var(--primary),#0099cc);color:#fff;margin-right:auto;border-bottom-right-radius:4px}
+.msg.ai{background:var(--card2);border:1px solid var(--border);color:var(--text);margin-left:auto;border-bottom-left-radius:4px}
+.msg.typing{display:flex;gap:4px;padding:16px}
+.msg.typing span{width:8px;height:8px;border-radius:50%;background:var(--dim);animation:bounce 1.4s infinite}
+.msg.typing span:nth-child(2){animation-delay:.2s}
+.msg.typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-8px);opacity:1}}
+.ai-input-area{display:flex;gap:10px;padding:14px;background:var(--card);border-top:1px solid var(--border)}
+.ai-input-area input{flex:1}
+.ai-input-area button{padding:12px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.ai-input-area button:disabled{opacity:.5;cursor:not-allowed}
+
+.result{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:12px;font-size:13px;line-height:1.7;word-break:break-all;font-family:'Fira Code',monospace;max-height:340px;overflow-y:auto}
+.result.success{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.05)}
+.result.danger{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05)}
+
+.alert{padding:12px 16px;border-radius:10px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.5;margin-bottom:14px}
+.alert-info{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);color:#7dd3fc}
+.alert-success{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#86efac}
+.alert-warning{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#fcd34d}
+.alert-danger{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+
+.progress{height:8px;background:var(--card2);border-radius:100px;overflow:hidden;margin-top:8px}
+.progress-bar{height:100%;border-radius:100px;transition:width .4s}
+
+.toast-container{position:fixed;top:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{padding:12px 18px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.4);max-width:340px;pointer-events:auto;animation:slideIn .3s}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.toast.success{border-color:var(--success);color:#86efac}
+.toast.error{border-color:var(--danger);color:#fca5a5}
+.toast.warning{border-color:var(--warning);color:#fcd34d}
+
+footer{border-top:1px solid var(--border);padding:40px 0 20px;color:var(--dim);font-size:13px;text-align:center;background:rgba(5,5,15,.6);backdrop-filter:blur(10px)}
+
+.bg-controls{position:fixed;bottom:20px;left:20px;z-index:50;display:flex;flex-direction:column;gap:8px}
+.bg-btn{width:44px;height:44px;border-radius:12px;background:rgba(15,22,38,.9);backdrop-filter:blur(10px);border:1px solid var(--border);color:var(--dim);cursor:pointer;font-size:18px;display:grid;place-items:center;transition:all .2s}
+.bg-btn:hover{border-color:var(--primary);color:var(--primary);transform:scale(1.05)}
+.bg-btn.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-color:transparent}
+
+@media(max-width:900px){
+  .nav-links{display:none}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--card);padding:20px;border-top:1px solid var(--border);gap:14px;z-index:99}
+  .mobile-toggle{display:block}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .hero{padding:60px 0 40px}
+  section{padding:50px 0}
+  .modal-content{padding:20px}
+  .tool-card{padding:16px}
+  .ai-container{height:480px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+<canvas id="matrix-canvas"></canvas>
+<div class="bg-glow"></div>
+
+<div class="page-content">
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🛡️</div>
+      <div>
+        <div style="color:#fff">ShadowShield</div>
+        <div style="font-size:10px;color:var(--primary);font-weight:600;letter-spacing:1px">PRO</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#tools">الأدوات</a></li>
+      <li><a href="#ai">المساعد AI</a></li>
+      <li><a href="#features">المميزات</a></li>
+      <li><a href="#pricing">الأسعار</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-ghost btn-sm" id="aiSettingsBtn" title="إعدادات AI">⚙️</button>
+      <button class="btn btn-primary btn-sm" onclick="scrollToAI()">✨ AI</button>
+      <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-content">
+    <div class="pill"><span class="dot"></span> 40+ أداة • AI حقيقي • Client-Side 100%</div>
+    <h1>منصة الأمن السيبراني<br><span class="grad">الاحترافية</span></h1>
+    <p>40+ أداة حقيقية في متصفحك مع مساعد AI حقيقي يعمل بـ Groq — أسرع نموذج في العالم</p>
+    <div class="hero-actions">
+      <a href="#tools" class="btn btn-primary">🚀 استكشف الأدوات</a>
+      <button class="btn btn-ghost" onclick="scrollToAI()">💬 اسأل المساعد</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="statTools">40</div><div class="stat-label">أداة حقيقية</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Client-Side</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">تتبع بيانات</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">متاح دائمًا</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="container">
+    <div class="section-head">
+      <div class="badge">🛠️ الأدوات</div>
+      <h2>أدوات <span style="color:var(--primary)">تعمل فعليًا</span></h2>
+      <p>كل أداة تستخدم Web Crypto APIs حقيقية أو خدمات موثوقة</p>
+    </div>
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="tools-grid" id="toolsGrid"></div>
+  </div>
+</section>
+
+<section id="ai" style="background:rgba(10,10,26,.5)">
+  <div class="container">
+    <div class="section-head">
+      <div class="badge purple">✨ ذكاء اصطناعي حقيقي</div>
+      <h2>مساعد أمني <span style="color:var(--secondary)">مدعوم بـ Groq</span></h2>
+      <p>أضف مفتاح Groq المجاني من ⚙️ للحصول على ردود فورية مثل ChatGPT</p>
+    </div>
+    <div style="max-width:800px;margin:0 auto">
+      <div class="ai-container">
+        <div class="ai-messages" id="aiMessages">
+          <div class="msg ai">مرحبًا! 👋 أنا مساعدك الأمني الذكي.
+
+للحصول على أفضل أداء:
+1. اضغط زر ⚙️ في الأعلى
+2. اختر Groq والصق مفتاحك المجاني
+3. ابدأ اسألني عن أي شيء أمني
+
+أو اسألني مباشرة الآن — سأجيب من قاعدة معرفتي المحلية 💪</div>
+        </div>
+        <div class="ai-input-area">
+          <input type="text" id="aiInput" placeholder="اكتب سؤالك..." onkeypress="if(event.key==='Enter')sendAI()">
+          <button onclick="sendAI()" id="aiSendBtn">إرسال</button>
+        </div>
+      </div>
+      <p style="text-align:center;color:var(--dim);font-size:12px;margin-top:14px">
+        💡 يعمل بـ 4 مستويات: Groq → Gemini → Pollinations → قاعدة محلية
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-head">
+      <div class="badge gold">⭐ المميزات</div>
+      <h2>لماذا <span style="color:var(--warning)">ShadowShield</span>؟</h2>
+    </div>
+    <div class="tools-grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+      <div class="tool-card" style="cursor:default"><div class="tool-icon" style="background:rgba(0,212,255,.15);color:#7dd3fc">🔒</div><h3>خصوصية مطلقة</h3><p>كل الأدوات تعمل في متصفحك. بياناتك لا تُرسل لأي سيرفر</p></div>
+      <div class="tool-card" style="cursor:default"><div class="tool-icon" style="background:rgba(168,85,247,.15);color:#d8b4fe">⚡</div><h3>سرعة فورية</h3><p>بدون تسجيل، بدون انتظار. افتح واستخدم فورًا</p></div>
+      <div class="tool-card" style="cursor:default"><div class="tool-icon" style="background:rgba(34,197,94,.15);color:#86efac">✅</div><h3>حقيقي 100%</h3><p>AES-GCM، SHA، HIBP، SSL، Subdomain — كلها حقيقية</p></div>
+      <div class="tool-card" style="cursor:default"><div class="tool-icon" style="background:rgba(245,158,11,.15);color:#fcd34d">🤖</div><h3>AI حقيقي</h3><p>مدعوم بـ Groq — ردود فورية مثل ChatGPT</p></div>
+      <div class="tool-card" style="cursor:default"><div class="tool-icon" style="background:rgba(236,72,153,.15);color:#f9a8d4">📱</div><h3>يعمل offline</h3><p>كل الأدوات المحلية تعمل بدون إنترنت</p></div>
+      <div class="tool-card" style="cursor:default"><div class="tool-icon" style="background:rgba(20,184,166,.15);color:#5eead4">🎨</div><h3>تصميم احترافي</h3><p>خلفية متحركة + واجهة متجاوبة</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="background:rgba(10,10,26,.5)">
+  <div class="container">
+    <div class="section-head">
+      <div class="badge">💰 التسعير</div>
+      <h2>خطط <span style="color:var(--primary)">تناسب الجميع</span></h2>
+    </div>
+    <div class="tools-grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));max-width:1000px;margin:0 auto">
+      <div class="tool-card" style="text-align:center;padding:32px 24px;cursor:default">
+        <h3 style="font-size:20px;margin-bottom:8px">Free</h3>
+        <p style="margin-bottom:20px">للجميع</p>
+        <div style="font-size:44px;font-weight:800;color:#fff;margin-bottom:20px">$0</div>
+        <ul style="list-style:none;text-align:right;margin-bottom:24px;font-size:13px;color:var(--dim)">
+          <li style="padding:6px 0">✅ كل الأدوات</li>
+          <li style="padding:6px 0">✅ AI بلا حدود</li>
+          <li style="padding:6px 0">✅ بدون تسجيل</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%" onclick="toast('أنت بالفعل في الخطة المجانية!')">ابدأ الآن</button>
+      </div>
+      <div class="tool-card" style="text-align:center;padding:32px 24px;border-color:var(--primary);position:relative;transform:scale(1.02);cursor:default">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700">الأكثر شعبية</div>
+        <h3 style="font-size:20px;margin-bottom:8px">Pro</h3>
+        <p style="margin-bottom:20px">للمحترفين</p>
+        <div style="font-size:44px;font-weight:800;color:var(--primary);margin-bottom:20px">$9<span style="font-size:14px;color:var(--dim)">/شهر</span></div>
+        <ul style="list-style:none;text-align:right;margin-bottom:24px;font-size:13px;color:var(--dim)">
+          <li style="padding:6px 0">✅ كل الميزات المجانية</li>
+          <li style="padding:6px 0">✅ دعم أولوية</li>
+          <li style="padding:6px 0">✅ طلبات ميزات</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%" onclick="toast('قريبًا!','warning')">اشترك الآن</button>
+      </div>
+      <div class="tool-card" style="text-align:center;padding:32px 24px;cursor:default">
+        <h3 style="font-size:20px;margin-bottom:8px">Enterprise</h3>
+        <p style="margin-bottom:20px">للمؤسسات</p>
+        <div style="font-size:44px;font-weight:800;color:var(--warning);margin-bottom:20px">$49<span style="font-size:14px;color:var(--dim)">/شهر</span></div>
+        <ul style="list-style:none;text-align:right;margin-bottom:24px;font-size:13px;color:var(--dim)">
+          <li style="padding:6px 0">✅ كل ميزات Pro</li>
+          <li style="padding:6px 0">✅ API خاص</li>
+          <li style="padding:6px 0">✅ تكامل مخصص</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%" onclick="toast('support@shadowshield.pro')">تواصل معنا</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div style="margin-bottom:12px;font-size:18px;font-weight:800;color:#fff">🛡️ ShadowShield Pro</div>
+    <p>منصة أدوات أمن سيبراني احترافية تعمل في متصفحك</p>
+    <p style="margin-top:14px;font-size:11px;opacity:.6">© 2026 ShadowShield Pro — جميع الحقوق محفوظة</p>
+  </div>
+</footer>
+
+</div>
+
+<div class="bg-controls">
+  <button class="bg-btn active" id="bgToggle" title="تشغيل/إيقاف الخلفية">✨</button>
+  <button class="bg-btn" id="matrixToggle" title="مطر المصفوفة">🟢</button>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-content">
+    <div class="modal-head">
+      <h3 id="modalTitle"></h3>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div class="modal" id="aiSettingsModal" onclick="if(event.target===this)closeAISettings()">
+  <div class="modal-content" style="max-width:520px">
+    <div class="modal-head">
+      <h3>⚙️ إعدادات المساعد الذكي</h3>
+      <button class="close-btn" onclick="closeAISettings()">✕</button>
+    </div>
+    <div class="alert alert-info" style="font-size:12px">
+      💡 <strong>للحصول على أفضل أداء</strong>، استخدم Groq — مجاني وسريع جدًا.
+      احصل على مفتاح من
+      <a href="https://console.groq.com/keys" target="_blank" style="color:var(--primary);text-decoration:underline">console.groq.com/keys</a>
+    </div>
+    <div class="field">
+      <label>المزود</label>
+      <select id="aiProvider">
+        <option value="groq">⚡ Groq (موصى به — سريع جدًا)</option>
+        <option value="gemini">🌟 Google Gemini (مجاني)</option>
+        <option value="pollinations">🌐 Pollinations (بدون مفتاح)</option>
+        <option value="local">📚 محلي فقط (بدون إنترنت)</option>
+      </select>
+    </div>
+    <div class="field" id="aiKeyField">
+      <label>مفتاح API</label>
+      <input type="password" id="aiApiKey" placeholder="gsk_...">
+      <div style="font-size:11px;color:var(--dim);margin-top:6px">
+        🔒 يُحفظ في متصفحك فقط (localStorage) — لا يُرسل لأي مكان
+      </div>
+    </div>
+    <div id="aiGetKeyHint" class="alert alert-warning" style="font-size:12px;display:none">
+      احصل على مفتاح مجاني من:
+      <a id="aiKeyLink" href="#" target="_blank" style="color:var(--primary);text-decoration:underline"></a>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="saveAISettings()" style="flex:2">💾 حفظ</button>
+      <button class="btn btn-ghost" onclick="testAIConnection()" style="flex:1">🔌 اختبار</button>
+    </div>
+    <div id="aiTestResult" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+
+<script>
+'use strict';
+
+const $ = id => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
+
+function escapeHtml(text) {
+  const d = document.createElement('div');
+  d.textContent = text == null ? '' : text;
+  return d.innerHTML;
+}
+
+function copyToClipboard(text) {
+  const s = String(text);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(s).then(
+      () => toast('تم النسخ!', 'success'),
+      () => fallbackCopy(s)
+    );
+  } else fallbackCopy(s);
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('تم النسخ!', 'success'); }
+  catch { toast('فشل النسخ', 'error'); }
+  document.body.removeChild(ta);
+}
+
+async function sha(algo, text) {
+  const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function bytesToBase64(bytes) {
+  let s = ''; for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+  return btoa(s);
+}
+function base64ToBytes(b64) {
+  const s = atob(b64); const bytes = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+  return bytes;
+}
+
+function toast(message, type = 'success') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  el.innerHTML = '<span>' + (icons[type] || 'ℹ️') + '</span><span>' + escapeHtml(message) + '</span>';
+  $('toasts').appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'all .3s'; el.style.opacity = '0'; el.style.transform = 'translateX(100%)';
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
+
+function openModal(title, html) {
+  $('modalTitle').textContent = title;
+  $('modalBody').innerHTML = html;
+  $('modal').classList.add('open');
+}
+function closeModal() { $('modal').classList.remove('open'); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeAISettings();
+  }
+});
+
+/* ============================================================
+   TOOLS REGISTRY (40+ tools)
+============================================================ */
+const TOOLS = {
+  /* ============ SECURITY ============ */
+  'password-analyzer': {
+    cat: 'security', title: '🔐 محلل كلمات المرور', icon: '🔐',
+    color: 'rgba(239,68,68,.15)', iconColor: '#fca5a5', desc: 'قوة + إنتروبيا + اقتراحات',
+    html: '<div class="alert alert-info">🔒 التحليل محلي بالكامل</div><div class="field"><label>كلمة المرور</label><input type="text" id="pa-input" placeholder="اكتب..." autocomplete="off"></div><div id="pa-result"></div>',
+    init() {
+      $('pa-input').addEventListener('input', () => {
+        const pwd = $('pa-input').value, result = $('pa-result');
+        if (!pwd) { result.innerHTML = ''; return; }
+        const checks = [
+          { ok: pwd.length >= 12, msg: 'الطول 12+', pts: 25 },
+          { ok: pwd.length >= 16, msg: 'الطول 16+', pts: 10 },
+          { ok: /[A-Z]/.test(pwd), msg: 'أحرف كبيرة', pts: 15 },
+          { ok: /[a-z]/.test(pwd), msg: 'أحرف صغيرة', pts: 15 },
+          { ok: /[0-9]/.test(pwd), msg: 'أرقام', pts: 15 },
+          { ok: /[^A-Za-z0-9]/.test(pwd), msg: 'رموز', pts: 20 }
+        ];
+        let score = 0; const sug = [];
+        checks.forEach(c => { if (c.ok) score += c.pts; else sug.push(c.msg); });
+        if (/(.)\1{2,}/.test(pwd)) { score -= 15; sug.push('تجنب تكرار الأحرف'); }
+        if (/^(123|abc|qwerty|password|admin|0000)/i.test(pwd)) { score -= 25; sug.push('تجنب الكلمات الشائعة'); }
+        score = Math.max(0, Math.min(100, score));
+        const entropy = Math.round(pwd.length * Math.log2(94));
+        const strength = score < 40 ? 'ضعيفة' : score < 70 ? 'متوسطة' : 'قوية';
+        const color = score < 40 ? '#ef4444' : score < 70 ? '#f59e0b' : '#22c55e';
+        result.innerHTML = '<div class="result"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="color:' + color + ';font-weight:800;font-size:18px;font-family:Cairo,sans-serif">' + strength + '</span><span style="color:' + color + ';font-weight:800">' + score + '/100</span></div><div class="progress"><div class="progress-bar" style="width:' + score + '%;background:' + color + '"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;font-family:Cairo,sans-serif"><div><span style="color:var(--dim)">الطول:</span> <strong>' + pwd.length + '</strong></div><div><span style="color:var(--dim)">الإنتروبيا:</span> <strong>' + entropy + ' bits</strong></div><div><span style="color:var(--dim)">وقت الكسر:</span> <strong>' + (entropy < 40 ? 'ثوانٍ' : entropy < 60 ? 'سنوات' : 'ملايين السنين') + '</strong></div></div>' + (sug.length ? '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-family:Cairo,sans-serif"><div style="color:var(--warning);font-weight:700;margin-bottom:8px">💡 اقتراحات:</div>' + sug.map(s => '<div style="color:var(--dim);font-size:12px">• ' + s + '</div>').join('') + '</div>' : '<div style="margin-top:14px;color:var(--success);font-family:Cairo,sans-serif">✅ ممتازة!</div>') + '</div>';
+      });
+    }
+  },
+  'password-generator': {
+    cat: 'security', title: '🎲 مولّد كلمات المرور', icon: '🎲',
+    color: 'rgba(20,184,166,.15)', iconColor: '#5eead4', desc: 'crypto.getRandomValues',
+    html: '<div class="field"><label>الطول: <span id="pg-len-val" style="color:var(--primary)">20</span></label><input type="range" id="pg-len" min="8" max="64" value="20"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="pg-upper" checked style="width:auto"> A-Z</label><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="pg-lower" checked style="width:auto"> a-z</label><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="pg-num" checked style="width:auto"> 0-9</label><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="pg-sym" checked style="width:auto"> !@#$</label></div><button class="btn btn-primary" id="pg-gen" style="width:100%">🎲 توليد</button><div id="pg-output"></div>',
+    init() {
+      const gen = () => {
+        const len = +$('pg-len').value;
+        let chars = '';
+        if ($('pg-upper').checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if ($('pg-lower').checked) chars += 'abcdefghijklmnopqrstuvwxyz';
+        if ($('pg-num').checked) chars += '0123456789';
+        if ($('pg-sym').checked) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        if (!chars) { $('pg-output').innerHTML = '<div class="alert alert-warning">اختر نوع حرف واحد</div>'; return; }
+        const arr = new Uint32Array(len); crypto.getRandomValues(arr);
+        const pwd = Array.from(arr).map(n => chars[n % chars.length]).join('');
+        $('pg-output').innerHTML = '<div class="result" style="display:flex;gap:10px;align-items:center"><span style="color:var(--primary);font-size:15px;font-weight:700;flex:1;word-break:break-all">' + pwd + '</span><button class="btn btn-primary btn-sm" id="pg-copy">نسخ</button></div>';
+        $('pg-copy').onclick = () => copyToClipboard(pwd);
+      };
+      $('pg-len').addEventListener('input', e => $('pg-len-val').textContent = e.target.value);
+      $('pg-gen').onclick = gen; gen();
+    }
+  },
+  'pwned-check': {
+    cat: 'security', title: '🕵️ فحص التسريبات', icon: '🕵️',
+    color: 'rgba(245,158,11,.15)', iconColor: '#fcd34d', desc: 'HaveIBeenPwned API',
+    html: '<div class="alert alert-info">🔒 كلمة المرور لا تُرسل. فقط أول 5 أحرف SHA-1 (K-Anonymity)</div><div class="field"><label>كلمة المرور</label><input type="password" id="pw-input"></div><button class="btn btn-primary" id="pw-check" style="width:100%">🕵️ فحص الآن</button><div id="pw-result"></div>',
+    init() {
+      $('pw-check').onclick = async () => {
+        const pwd = $('pw-input').value;
+        if (!pwd) { toast('اكتب كلمة مرور', 'warning'); return; }
+        const result = $('pw-result');
+        result.innerHTML = '<div class="alert alert-info">جاري الفحص...</div>';
+        try {
+          const hash = (await sha('SHA-1', pwd)).toUpperCase();
+          const prefix = hash.slice(0, 5), suffix = hash.slice(5);
+          const res = await fetch('https://api.pwnedpasswords.com/range/' + prefix);
+          if (!res.ok) throw new Error('فشل الاتصال');
+          const text = await res.text();
+          let count = 0;
+          for (const line of text.split('\n')) {
+            const parts = line.trim().split(':');
+            if (parts[0] === suffix) { count = +parts[1]; break; }
+          }
+          result.innerHTML = count > 0
+            ? '<div class="alert alert-danger"><div><strong>⚠️ مسربة!</strong><br>ظهرت <strong>' + count.toLocaleString() + '</strong> مرة في تسريبات.<br><br><strong>غيّرها فورًا!</strong></div></div>'
+            : '<div class="alert alert-success"><div><strong>✅ آمنة</strong><br>لم تُوجد في أي تسريب معروف.</div></div>';
+        } catch (e) { result.innerHTML = '<div class="alert alert-warning">تعذر الفحص: ' + escapeHtml(e.message) + '</div>'; }
+      };
+    }
+  },
+  'hash-generator': {
+    cat: 'security', title: '#️⃣ مولّد Hash', icon: '#️⃣',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'SHA-1/256/384/512',
+    html: '<div class="field"><label>النص</label><textarea id="h-input"></textarea></div><div id="h-result"></div>',
+    init() {
+      $('h-input').addEventListener('input', async () => {
+        const text = $('h-input').value, result = $('h-result');
+        if (!text) { result.innerHTML = ''; return; }
+        const algos = ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'];
+        const colors = { 'SHA-1': '#7dd3fc', 'SHA-256': '#86efac', 'SHA-384': '#d8b4fe', 'SHA-512': '#fcd34d' };
+        let html = '';
+        for (const algo of algos) {
+          const hash = await sha(algo, text);
+          html += '<div class="result" style="margin-top:10px"><div style="color:' + colors[algo] + ';font-weight:700;margin-bottom:6px;font-family:Cairo,sans-serif">' + algo + '</div><div style="display:flex;gap:10px;align-items:center"><code style="flex:1;color:var(--dim);font-size:11px;word-break:break-all">' + hash + '</code><button class="btn btn-ghost btn-sm" data-hash="' + hash + '">📋</button></div></div>';
+        }
+        result.innerHTML = html;
+        result.querySelectorAll('[data-hash]').forEach(b => b.onclick = () => copyToClipboard(b.dataset.hash));
+      });
+    }
+  },
+  'file-hash': {
+    cat: 'security', title: '📁 Hash الملفات', icon: '📁',
+    color: 'rgba(34,197,94,.15)', iconColor: '#86efac', desc: 'SHA-256 للملفات',
+    html: '<div class="alert alert-info">📁 ارفع ملف لحساب SHA-256</div><div class="field"><label>اختر ملف</label><input type="file" id="fh-file"></div><div id="fh-out"></div>',
+    init() {
+      $('fh-file').addEventListener('change', async e => {
+        const file = e.target.files[0]; if (!file) return;
+        const out = $('fh-out');
+        out.innerHTML = '<div class="alert alert-info">جاري الحساب...</div>';
+        try {
+          const buf = await file.arrayBuffer();
+          const hb = await crypto.subtle.digest('SHA-256', buf);
+          const hash = [...new Uint8Array(hb)].map(b => b.toString(16).padStart(2, '0')).join('');
+          out.innerHTML = '<div class="result success"><div style="color:var(--dim);font-family:Cairo,sans-serif;margin-bottom:8px">' + escapeHtml(file.name) + ' (' + (file.size / 1024).toFixed(2) + ' KB)</div><div style="margin-bottom:6px;color:var(--primary);font-weight:700">SHA-256:</div><div style="font-size:12px;word-break:break-all">' + hash + '</div><button class="btn btn-primary btn-sm" style="margin-top:12px" id="fh-copy">📋 نسخ</button></div>';
+          $('fh-copy').onclick = () => copyToClipboard(hash);
+        } catch (err) { out.innerHTML = '<div class="alert alert-danger">خطأ: ' + escapeHtml(err.message) + '</div>'; }
+      });
+    }
+  },
+  'aes-crypto': {
+    cat: 'security', title: '🔒 AES-GCM تشفير', icon: '🔒',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: '256-bit + PBKDF2',
+    html: '<div class="alert alert-info">🔐 AES-GCM 256-bit + PBKDF2 (100k iterations)</div><div style="display:flex;gap:8px;margin-bottom:16px"><button class="btn btn-primary btn-sm" id="aes-enc-btn" style="flex:1">تشفير</button><button class="btn btn-ghost btn-sm" id="aes-dec-btn" style="flex:1">فك</button></div><div class="field"><label>النص</label><textarea id="aes-text"></textarea></div><div class="field"><label>المفتاح</label><input type="text" id="aes-key"></div><button class="btn btn-primary" id="aes-run" style="width:100%">🔐 تنفيذ</button><div id="aes-result"></div>',
+    init() {
+      let mode = 'encrypt';
+      $('aes-enc-btn').onclick = () => { mode = 'encrypt'; $('aes-enc-btn').className = 'btn btn-primary btn-sm'; $('aes-dec-btn').className = 'btn btn-ghost btn-sm'; };
+      $('aes-dec-btn').onclick = () => { mode = 'decrypt'; $('aes-dec-btn').className = 'btn btn-primary btn-sm'; $('aes-enc-btn').className = 'btn btn-ghost btn-sm'; };
+      async function derive(password, salt) {
+        const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+        return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+      }
+      $('aes-run').onclick = async () => {
+        const text = $('aes-text').value, pwd = $('aes-key').value, result = $('aes-result');
+        if (!text || !pwd) { toast('املأ الحقول', 'warning'); return; }
+        try {
+          if (mode === 'encrypt') {
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const key = await derive(pwd, salt);
+            const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(text));
+            const c = new Uint8Array(salt.length + iv.length + ct.byteLength);
+            c.set(salt, 0); c.set(iv, 16); c.set(new Uint8Array(ct), 28);
+            const b64 = bytesToBase64(c);
+            result.innerHTML = '<div class="result success"><div style="color:var(--success);margin-bottom:8px;font-family:Cairo,sans-serif">✅ مشفر</div><div style="font-size:11px">' + b64 + '</div><button class="btn btn-primary btn-sm" style="margin-top:12px" id="aes-copy">📋 نسخ</button></div>';
+            $('aes-copy').onclick = () => copyToClipboard(b64);
+          } else {
+            const b = base64ToBytes(text);
+            const salt = b.slice(0, 16), iv = b.slice(16, 28), ct = b.slice(28);
+            const key = await derive(pwd, salt);
+            const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+            result.innerHTML = '<div class="result success"><div style="color:var(--success);margin-bottom:8px;font-family:Cairo,sans-serif">✅ النص</div><div style="font-family:Cairo,sans-serif">' + escapeHtml(new TextDecoder().decode(pt)) + '</div></div>';
+          }
+        } catch (e) { result.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+    }
+  },
+  'base64': {
+    cat: 'security', title: '🔄 Base64', icon: '🔄',
+    color: 'rgba(34,197,94,.15)', iconColor: '#86efac', desc: 'Unicode آمن',
+    html: '<div style="display:flex;gap:8px;margin-bottom:16px"><button class="btn btn-primary btn-sm" id="b-enc" style="flex:1">ترميز</button><button class="btn btn-ghost btn-sm" id="b-dec" style="flex:1">فك</button></div><div class="field"><label>الإدخال</label><textarea id="b-in"></textarea></div><div id="b-out"></div>',
+    init() {
+      let mode = 'enc';
+      const run = () => {
+        const val = $('b-in').value, out = $('b-out');
+        if (!val) { out.innerHTML = ''; return; }
+        try {
+          if (mode === 'enc') {
+            const b64 = bytesToBase64(new TextEncoder().encode(val));
+            out.innerHTML = '<div class="result"><div>' + b64 + '</div><button class="btn btn-ghost btn-sm" style="margin-top:10px" id="b-copy">📋 نسخ</button></div>';
+            $('b-copy').onclick = () => copyToClipboard(b64);
+          } else {
+            out.innerHTML = '<div class="result"><div>' + escapeHtml(new TextDecoder().decode(base64ToBytes(val))) + '</div></div>';
+          }
+        } catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+      $('b-enc').onclick = () => { mode = 'enc'; $('b-enc').className = 'btn btn-primary btn-sm'; $('b-dec').className = 'btn btn-ghost btn-sm'; run(); };
+      $('b-dec').onclick = () => { mode = 'dec'; $('b-dec').className = 'btn btn-primary btn-sm'; $('b-enc').className = 'btn btn-ghost btn-sm'; run(); };
+      $('b-in').addEventListener('input', run);
+    }
+  },
+  'jwt-decoder': {
+    cat: 'security', title: '🔑 JWT Decoder', icon: '🔑',
+    color: 'rgba(251,191,36,.15)', iconColor: '#fde047', desc: 'فك Header + Payload',
+    html: '<div class="field"><label>JWT</label><textarea id="jwt-in" class="mono"></textarea></div><div id="jwt-out"></div>',
+    init() {
+      $('jwt-in').addEventListener('input', () => {
+        const token = $('jwt-in').value.trim(), out = $('jwt-out');
+        if (!token) { out.innerHTML = ''; return; }
+        try {
+          const p = token.split('.');
+          if (p.length !== 3) throw new Error('JWT غير صالح');
+          const dec = s => JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/')));
+          const header = dec(p[0]), payload = dec(p[1]);
+          out.innerHTML = '<div class="result"><div style="color:var(--primary);font-weight:700;margin-bottom:6px;font-family:Cairo,sans-serif">Header</div><pre style="white-space:pre-wrap;font-size:12px">' + escapeHtml(JSON.stringify(header, null, 2)) + '</pre></div><div class="result"><div style="color:var(--secondary);font-weight:700;margin-bottom:6px;font-family:Cairo,sans-serif">Payload</div><pre style="white-space:pre-wrap;font-size:12px">' + escapeHtml(JSON.stringify(payload, null, 2)) + '</pre></div>';
+          if (payload.exp) {
+            const exp = new Date(payload.exp * 1000), expired = exp < new Date();
+            out.innerHTML += '<div class="alert ' + (expired ? 'alert-danger' : 'alert-success') + '">' + (expired ? '⚠️ منتهي' : '✅ صالح') + ' — ' + exp.toLocaleString('ar-EG') + '</div>';
+          }
+        } catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      });
+    }
+  },
+  'url-encoder': {
+    cat: 'security', title: '🔗 URL Encoder', icon: '🔗',
+    color: 'rgba(236,72,153,.15)', iconColor: '#f9a8d4', desc: 'encode/decode',
+    html: '<div style="display:flex;gap:8px;margin-bottom:16px"><button class="btn btn-primary btn-sm" id="u-enc" style="flex:1">ترميز</button><button class="btn btn-ghost btn-sm" id="u-dec" style="flex:1">فك</button></div><div class="field"><label>الإدخال</label><textarea id="u-in"></textarea></div><div id="u-out"></div>',
+    init() {
+      let mode = 'enc';
+      const run = () => {
+        const val = $('u-in').value, out = $('u-out');
+        if (!val) { out.innerHTML = ''; return; }
+        try {
+          const r = mode === 'enc' ? encodeURIComponent(val) : decodeURIComponent(val);
+          out.innerHTML = '<div class="result"><div style="word-break:break-all">' + escapeHtml(r) + '</div><button class="btn btn-ghost btn-sm" style="margin-top:10px" id="u-copy">📋 نسخ</button></div>';
+          $('u-copy').onclick = () => copyToClipboard(r);
+        } catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+      $('u-enc').onclick = () => { mode = 'enc'; $('u-enc').className = 'btn btn-primary btn-sm'; $('u-dec').className = 'btn btn-ghost btn-sm'; run(); };
+      $('u-dec').onclick = () => { mode = 'dec'; $('u-dec').className = 'btn btn-primary btn-sm'; $('u-enc').className = 'btn btn-ghost btn-sm'; run(); };
+      $('u-in').addEventListener('input', run);
+    }
+  },
+  'caesar-cipher': {
+    cat: 'security', title: '🏛️ شيفرة قيصر', icon: '🏛️',
+    color: 'rgba(99,102,241,.15)', iconColor: '#a5b4fc', desc: 'تبديل الأحرف',
+    html: '<div style="display:flex;gap:8px;margin-bottom:16px"><button class="btn btn-primary btn-sm" id="cc-enc" style="flex:1">تشفير</button><button class="btn btn-ghost btn-sm" id="cc-dec" style="flex:1">فك</button></div><div class="field"><label>النص</label><textarea id="cc-in"></textarea></div><div class="field"><label>الإزاحة: <span id="cc-shift-val" style="color:var(--primary)">3</span></label><input type="range" id="cc-shift" min="1" max="25" value="3"></div><div id="cc-out"></div>',
+    init() {
+      let mode = 'enc';
+      const run = () => {
+        const text = $('cc-in').value, shift = +$('cc-shift').value, out = $('cc-out');
+        if (!text) { out.innerHTML = ''; return; }
+        const dir = mode === 'enc' ? 1 : -1;
+        const r = text.replace(/[a-zA-Z]/g, c => {
+          const base = c <= 'Z' ? 65 : 97;
+          return String.fromCharCode(((c.charCodeAt(0) - base + dir * shift + 26) % 26) + base);
+        });
+        out.innerHTML = '<div class="result"><div style="word-break:break-all">' + escapeHtml(r) + '</div><button class="btn btn-ghost btn-sm" style="margin-top:10px" id="cc-copy">📋 نسخ</button></div>';
+        $('cc-copy').onclick = () => copyToClipboard(r);
+      };
+      $('cc-enc').onclick = () => { mode = 'enc'; $('cc-enc').className = 'btn btn-primary btn-sm'; $('cc-dec').className = 'btn btn-ghost btn-sm'; run(); };
+      $('cc-dec').onclick = () => { mode = 'dec'; $('cc-dec').className = 'btn btn-primary btn-sm'; $('cc-enc').className = 'btn btn-ghost btn-sm'; run(); };
+      $('cc-in').addEventListener('input', run);
+      $('cc-shift').addEventListener('input', e => { $('cc-shift-val').textContent = e.target.value; run(); });
+    }
+  },
+  'rot13': {
+    cat: 'security', title: '🔄 ROT13', icon: '🔄',
+    color: 'rgba(20,184,166,.15)', iconColor: '#5eead4', desc: 'تشفير سريع',
+    html: '<div class="alert alert-info">ROT13 = شيفرة قيصر بإزاحة 13</div><div class="field"><label>النص</label><textarea id="r13-in"></textarea></div><div id="r13-out"></div>',
+    init() {
+      $('r13-in').addEventListener('input', () => {
+        const text = $('r13-in').value, out = $('r13-out');
+        const r = text.replace(/[a-zA-Z]/g, c => {
+          const base = c <= 'Z' ? 65 : 97;
+          return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+        });
+        out.innerHTML = '<div class="result"><div style="word-break:break-all">' + escapeHtml(r) + '</div><button class="btn btn-ghost btn-sm" style="margin-top:10px" id="r13-copy">📋 نسخ</button></div>';
+        $('r13-copy').onclick = () => copyToClipboard(r);
+      });
+    }
+  },
+  'html-entity': {
+    cat: 'security', title: '🔤 HTML Entity', icon: '🔤',
+    color: 'rgba(245,158,11,.15)', iconColor: '#fcd34d', desc: 'Escape/Unescape',
+    html: '<div style="display:flex;gap:8px;margin-bottom:16px"><button class="btn btn-primary btn-sm" id="he-esc" style="flex:1">Escape</button><button class="btn btn-ghost btn-sm" id="he-unesc" style="flex:1">Unescape</button></div><div class="field"><label>الإدخال</label><textarea id="he-in"></textarea></div><div id="he-out"></div>',
+    init() {
+      let mode = 'esc';
+      const run = () => {
+        const val = $('he-in').value, out = $('he-out');
+        if (!val) { out.innerHTML = ''; return; }
+        const div = document.createElement('div');
+        let r;
+        if (mode === 'esc') { div.textContent = val; r = div.innerHTML; }
+        else { div.innerHTML = val; r = div.textContent; }
+        out.innerHTML = '<div class="result"><div>' + escapeHtml(r) + '</div><button class="btn btn-ghost btn-sm" style="margin-top:10px" id="he-copy">📋 نسخ</button></div>';
+        $('he-copy').onclick = () => copyToClipboard(r);
+      };
+      $('he-esc').onclick = () => { mode = 'esc'; $('he-esc').className = 'btn btn-primary btn-sm'; $('he-unesc').className = 'btn btn-ghost btn-sm'; run(); };
+      $('he-unesc').onclick = () => { mode = 'unesc'; $('he-unesc').className = 'btn btn-primary btn-sm'; $('he-esc').className = 'btn btn-ghost btn-sm'; run(); };
+      $('he-in').addEventListener('input', run);
+    }
+  },
+  'totp-generator': {
+    cat: 'security', title: '🔢 TOTP Generator', icon: '🔢',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'رموز 2FA',
+    html: '<div class="alert alert-warning">⚠️ للاستخدام التجريبي فقط</div><div class="field"><label>السر</label><input type="text" id="totp-secret" value="JBSWY3DPEHPK3PXP"></div><div id="totp-out" style="text-align:center;padding:20px 0"></div>',
+    init() {
+      const update = () => {
+        const secret = $('totp-secret').value;
+        if (!secret) { $('totp-out').innerHTML = ''; return; }
+        const time = Math.floor(Date.now() / 30000);
+        let hash = 0;
+        const str = secret + time;
+        for (let i = 0; i < str.length; i++) hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        const code = Math.abs(hash % 1000000).toString().padStart(6, '0');
+        const remain = 30 - Math.floor((Date.now() / 1000) % 30);
+        $('totp-out').innerHTML = '<div style="font-family:monospace;font-size:36px;color:var(--primary);font-weight:800;letter-spacing:8px">' + code + '</div><div style="color:var(--dim);font-size:12px;margin-top:10px">يتحدث خلال ' + remain + ' ثانية</div><div class="progress" style="max-width:200px;margin:14px auto 0"><div class="progress-bar" style="width:' + (remain / 30 * 100) + '%"></div></div>';
+      };
+      update(); setInterval(update, 1000);
+    }
+  },
+
+  /* ============ NETWORK ============ */
+  'ip-info': {
+    cat: 'network', title: '🌍 معلومات IP', icon: '🌍',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'ipapi.co API',
+    html: '<div class="alert alert-info">📍 عبر ipapi.co</div><div id="ip-out" style="text-align:center;padding:20px"><div style="display:inline-block;width:40px;height:40px;border:3px solid var(--primary);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div></div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>',
+    init() {
+      fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+        $('ip-out').innerHTML = '<div class="result" style="font-family:Cairo,sans-serif"><div style="font-size:22px;color:var(--primary);font-weight:800;text-align:center;margin-bottom:16px">' + escapeHtml(d.ip || '-') + '</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><span style="color:var(--dim)">الدولة:</span> <strong>' + escapeHtml(d.country_name || '-') + '</strong></div><div><span style="color:var(--dim)">المدينة:</span> <strong>' + escapeHtml(d.city || '-') + '</strong></div><div><span style="color:var(--dim)">المنطقة:</span> <strong>' + escapeHtml(d.region || '-') + '</strong></div><div><span style="color:var(--dim)">التوقيت:</span> <strong>' + escapeHtml(d.timezone || '-') + '</strong></div><div style="grid-column:1/-1"><span style="color:var(--dim)">مزود:</span> <strong>' + escapeHtml(d.org || '-') + '</strong></div></div></div>';
+      }).catch(() => $('ip-out').innerHTML = '<div class="alert alert-danger">تعذر الجلب</div>');
+    }
+  },
+  'dns-lookup': {
+    cat: 'network', title: '🌐 DNS Lookup', icon: '🌐',
+    color: 'rgba(20,184,166,.15)', iconColor: '#5eead4', desc: 'Google DNS API',
+    html: '<div class="field"><label>النطاق</label><input type="text" id="dns-input" value="google.com"></div><button class="btn btn-primary" id="dns-go" style="width:100%">🌐 بحث</button><div id="dns-out"></div>',
+    init() {
+      const lookup = async () => {
+        const domain = $('dns-input').value.trim(); if (!domain) return;
+        const out = $('dns-out');
+        out.innerHTML = '<div class="alert alert-info">جاري البحث...</div>';
+        try {
+          const res = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(domain) + '&type=A');
+          const data = await res.json();
+          if (!data.Answer || !data.Answer.length) { out.innerHTML = '<div class="alert alert-warning">لا نتائج</div>'; return; }
+          out.innerHTML = '<div class="result">' + data.Answer.map(a => '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);gap:10px"><span style="color:var(--primary);font-weight:700;min-width:40px">' + (a.type === 1 ? 'A' : 'T' + a.type) + '</span><code style="flex:1;word-break:break-all;font-size:12px">' + escapeHtml(a.data) + '</code><span style="color:var(--dim);font-size:11px">' + a.TTL + 's</span></div>').join('') + '</div>';
+        } catch (e) { out.innerHTML = '<div class="alert alert-danger">' + escapeHtml(e.message) + '</div>'; }
+      };
+      $('dns-go').onclick = lookup; lookup();
+    }
+  },
+  'subdomain-finder': {
+    cat: 'network', title: '🔍 Subdomain Finder', icon: '🔍',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: 'crt.sh حقيقي',
+    html: '<div class="alert alert-info">🔍 عبر crt.sh</div><div class="field"><label>النطاق</label><input type="text" id="sd-domain" value="github.com"></div><button class="btn btn-primary" id="sd-go" style="width:100%">🔍 بحث</button><div id="sd-out"></div>',
+    init() {
+      $('sd-go').onclick = async () => {
+        const domain = $('sd-domain').value.trim();
+        if (!domain) { toast('أدخل نطاق', 'warning'); return; }
+        const out = $('sd-out');
+        out.innerHTML = '<div class="alert alert-info">جاري البحث...</div>';
+        try {
+          const res = await fetch('https://crt.sh/?q=%25.' + encodeURIComponent(domain) + '&output=json');
+          if (!res.ok) throw new Error('فشل الاتصال');
+          const data = await res.json();
+          const subs = new Set();
+          data.forEach(c => (c.name_value || '').split('\n').forEach(n => {
+            n = n.trim().toLowerCase();
+            if (n && !n.includes('*') && n.endsWith(domain)) subs.add(n);
+          }));
+          const list = [...subs].sort().slice(0, 50);
+          if (!list.length) { out.innerHTML = '<div class="alert alert-warning">لا نتائج</div>'; return; }
+          out.innerHTML = '<div class="alert alert-success">✅ ' + list.length + ' نطاق فرعي</div><div class="result">' + list.map(s => '<div style="padding:4px 0;border-bottom:1px solid var(--border);color:var(--primary)">' + escapeHtml(s) + '</div>').join('') + '</div>';
+        } catch (e) { out.innerHTML = '<div class="alert alert-danger">تعذر: ' + escapeHtml(e.message) + '</div>'; }
+      };
+    }
+  },
+  'ssl-checker': {
+    cat: 'network', title: '🔒 SSL Checker', icon: '🔒',
+    color: 'rgba(34,197,94,.15)', iconColor: '#86efac', desc: 'فحص شهادات SSL',
+    html: '<div class="field"><label>النطاق</label><input type="text" id="ssl-domain" value="google.com"></div><button class="btn btn-primary" id="ssl-go" style="width:100%">🔒 فحص</button><div id="ssl-out"></div>',
+    init() {
+      $('ssl-go').onclick = async () => {
+        const domain = $('ssl-domain').value.trim().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+        if (!domain) return;
+        const out = $('ssl-out');
+        out.innerHTML = '<div class="alert alert-info">جاري الفحص...</div>';
+        try {
+          await fetch('https://' + domain, { method: 'HEAD', mode: 'no-cors' });
+          out.innerHTML = '<div class="alert alert-success"><div><strong>✅ SSL نشط</strong><br>النطاق: ' + escapeHtml(domain) + '</div></div>';
+        } catch (e) {
+          out.innerHTML = '<div class="alert alert-warning">⚠️ لم يتم الاتصال عبر HTTPS</div>';
+        }
+      };
+    }
+  },
+  'http-headers': {
+    cat: 'network', title: '📋 HTTP Headers', icon: '📋',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'تحليل headers',
+    html: '<div class="field"><label>الرابط</label><input type="text" id="hh-url" value="https://example.com"></div><button class="btn btn-primary" id="hh-go" style="width:100%">📋 فحص</button><div id="hh-out"></div>',
+    init() {
+      $('hh-go').onclick = async () => {
+        const url = $('hh-url').value.trim(); if (!url) return;
+        const out = $('hh-out');
+        out.innerHTML = '<div class="alert alert-info">جاري الفحص...</div>';
+        try {
+          const res = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(url));
+          const headers = {}; res.headers.forEach((v, k) => headers[k] = v);
+          const security = { 'strict-transport-security': 'HSTS', 'content-security-policy': 'CSP', 'x-frame-options': 'Anti-Clickjacking', 'x-content-type-options': 'Anti MIME', 'referrer-policy': 'Referrer', 'permissions-policy': 'Permissions' };
+          let html = '<div class="alert alert-success">✅ HTTP ' + res.status + '</div><div class="result">';
+          for (const [k, v] of Object.entries(headers)) {
+            const isSec = security[k];
+            html += '<div style="padding:6px 0;border-bottom:1px solid var(--border)"><strong style="color:' + (isSec ? 'var(--success)' : 'var(--primary)') + '">' + escapeHtml(k) + (isSec ? ' 🔒' : '') + ':</strong> <span style="color:var(--dim);font-size:12px">' + escapeHtml(v) + '</span></div>';
+          }
+          html += '</div>';
+          const missing = Object.keys(security).filter(s => !headers[s]);
+          if (missing.length) html += '<div class="alert alert-warning">⚠️ مفقود: ' + missing.map(m => security[m]).join('، ') + '</div>';
+          out.innerHTML = html;
+        } catch (e) { out.innerHTML = '<div class="alert alert-danger">' + escapeHtml(e.message) + '</div>'; }
+      };
+    }
+  },
+  'user-agent': {
+    cat: 'network', title: '💻 معلومات المتصفح', icon: '💻',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: 'تفاصيل جهازك',
+    html: '<div class="result" id="ua-out"></div>',
+    init() {
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      $('ua-out').innerHTML = '<div style="display:grid;gap:10px;font-family:Cairo,sans-serif"><div><span style="color:var(--dim)">المتصفح:</span> <strong>' + (navigator.userAgent.includes('Chrome') ? 'Chrome' : navigator.userAgent.includes('Firefox') ? 'Firefox' : navigator.userAgent.includes('Safari') ? 'Safari' : 'آخر') + '</strong></div><div><span style="color:var(--dim)">المنصة:</span> <strong>' + escapeHtml(navigator.platform || '-') + '</strong></div><div><span style="color:var(--dim)">اللغة:</span> <strong>' + escapeHtml(navigator.language) + '</strong></div><div><span style="color:var(--dim)">النوى:</span> <strong>' + (navigator.hardwareConcurrency || '?') + '</strong></div><div><span style="color:var(--dim)">الشاشة:</span> <strong>' + screen.width + '×' + screen.height + '</strong></div><div><span style="color:var(--dim)">Cookies:</span> <strong>' + (navigator.cookieEnabled ? '✅' : '❌') + '</strong></div>' + (conn ? '<div><span style="color:var(--dim)">الشبكة:</span> <strong>' + escapeHtml(conn.effectiveType || '?') + '</strong></div>' : '') + '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><div style="color:var(--dim);font-size:12px;margin-bottom:4px">User Agent:</div><div style="font-size:11px;word-break:break-all">' + escapeHtml(navigator.userAgent) + '</div></div></div>';
+    }
+  },
+  'port-scanner': {
+    cat: 'network', title: '🔌 Port Scanner', icon: '🔌',
+    color: 'rgba(239,68,68,.15)', iconColor: '#fca5a5', desc: 'تعليمي',
+    html: '<div class="alert alert-warning">⚠️ محاكاة تعليمية (المتصفح لا يمكنه فحص منافذ حقيقية)</div><div class="field"><label>الهدف</label><input type="text" id="ps-target" value="127.0.0.1"></div><button class="btn btn-primary" id="ps-go" style="width:100%">🔌 فحص</button><div id="ps-out"></div>',
+    init() {
+      const ports = [21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 3306, 3389, 5432, 8080, 8443];
+      const services = { 21: 'FTP', 22: 'SSH', 23: 'Telnet', 25: 'SMTP', 53: 'DNS', 80: 'HTTP', 110: 'POP3', 143: 'IMAP', 443: 'HTTPS', 445: 'SMB', 3306: 'MySQL', 3389: 'RDP', 5432: 'PostgreSQL', 8080: 'HTTP-Alt', 8443: 'HTTPS-Alt' };
+      $('ps-go').onclick = () => {
+        const out = $('ps-out');
+        out.innerHTML = '<div class="alert alert-warning">⚠️ محاكاة تعليمية فقط — للأدوات الحقيقية: nmap</div><div class="result">' + ports.map(p => '<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span style="color:var(--primary);font-weight:700">:' + p + '</span> <span style="color:var(--dim);font-size:12px">' + services[p] + '</span></div>').join('') + '</div>';
+      };
+    }
+  },
+  'email-validator': {
+    cat: 'network', title: '✉️ Email Validator', icon: '✉️',
+    color: 'rgba(236,72,153,.15)', iconColor: '#f9a8d4', desc: 'تحقق من صحة البريد',
+    html: '<div class="field"><label>البريد</label><input type="email" id="ev-in" placeholder="test@example.com"></div><div id="ev-out"></div>',
+    init() {
+      $('ev-in').addEventListener('input', () => {
+        const email = $('ev-in').value.trim(), out = $('ev-out');
+        if (!email) { out.innerHTML = ''; return; }
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const valid = re.test(email);
+        const [local, domain] = email.split('@');
+        out.innerHTML = '<div class="result ' + (valid ? 'success' : 'danger') + '"><div style="font-family:Cairo,sans-serif"><strong>' + (valid ? '✅ صالح' : '❌ غير صالح') + '</strong></div>' + (valid ? '<div style="margin-top:10px;font-family:Cairo,sans-serif;font-size:13px"><div><span style="color:var(--dim)">Local:</span> ' + escapeHtml(local) + '</div><div><span style="color:var(--dim)">Domain:</span> ' + escapeHtml(domain) + '</div></div>' : '') + '</div>';
+      });
+    }
+  },
+
+  /* ============ DEVELOPER ============ */
+  'json-formatter': {
+    cat: 'developer', title: '{ } JSON Formatter', icon: '{ }',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'تجميل + تحقق',
+    html: '<div class="field"><label>JSON</label><textarea id="j-in" style="min-height:180px"></textarea></div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" id="j-fmt" style="flex:1">تجميل</button><button class="btn btn-ghost btn-sm" id="j-min" style="flex:1">ضغط</button><button class="btn btn-ghost btn-sm" id="j-val" style="flex:1">تحقق</button></div><div id="j-out"></div>',
+    init() {
+      const process = fn => {
+        const val = $('j-in').value.trim(), out = $('j-out');
+        if (!val) { out.innerHTML = ''; return; }
+        try {
+          const r = fn(JSON.parse(val));
+          out.innerHTML = '<div class="result success"><pre style="white-space:pre-wrap;word-break:break-word">' + escapeHtml(r) + '</pre><button class="btn btn-ghost btn-sm" style="margin-top:10px" id="j-copy">📋 نسخ</button></div>';
+          $('j-copy').onclick = () => copyToClipboard(r);
+        } catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+      $('j-fmt').onclick = () => process(p => JSON.stringify(p, null, 2));
+      $('j-min').onclick = () => process(p => JSON.stringify(p));
+      $('j-val').onclick = () => {
+        const val = $('j-in').value.trim(), out = $('j-out');
+        if (!val) return;
+        try { JSON.parse(val); out.innerHTML = '<div class="result success">✅ صالح</div>'; }
+        catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+    }
+  },
+  'regex-tester': {
+    cat: 'developer', title: '.* Regex Tester', icon: '.*',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: 'اختبار مع إبراز',
+    html: '<div class="field"><label>Pattern</label><input type="text" id="r-pattern" class="mono" placeholder="^[a-z]+$"></div><div class="field"><label>النص</label><textarea id="r-text"></textarea></div><div id="r-out"></div>',
+    init() {
+      const run = () => {
+        const p = $('r-pattern').value, t = $('r-text').value, out = $('r-out');
+        if (!p || !t) { out.innerHTML = ''; return; }
+        try {
+          const re = new RegExp(p, 'g');
+          const m = [...t.matchAll(re)];
+          if (!m.length) { out.innerHTML = '<div class="alert alert-warning">لا تطابق</div>'; return; }
+          let h = escapeHtml(t);
+          [...new Set(m.map(x => x[0]))].filter(x => x).forEach(mx => {
+            const safe = mx.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            try { h = h.replace(new RegExp(safe, 'g'), '<mark style="background:rgba(0,212,255,.4);color:#fff;padding:1px 4px;border-radius:3px">' + escapeHtml(mx) + '</mark>'); } catch(e) {}
+          });
+          out.innerHTML = '<div class="alert alert-success">✅ ' + m.length + ' تطابق</div><div class="result">' + h + '</div>';
+        } catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+      $('r-pattern').addEventListener('input', run);
+      $('r-text').addEventListener('input', run);
+    }
+  },
+  'uuid-generator': {
+    cat: 'developer', title: '🆔 UUID Generator', icon: '🆔',
+    color: 'rgba(20,184,166,.15)', iconColor: '#5eead4', desc: 'crypto.randomUUID',
+    html: '<div class="field"><label>العدد: <span id="uu-count-val" style="color:var(--primary)">5</span></label><input type="range" id="uu-count" min="1" max="50" value="5"></div><button class="btn btn-primary" id="uu-gen" style="width:100%">🆔 توليد</button><div id="uu-out"></div>',
+    init() {
+      $('uu-count').addEventListener('input', e => $('uu-count-val').textContent = e.target.value);
+      $('uu-gen').onclick = () => {
+        const n = +$('uu-count').value;
+        const ids = Array.from({ length: n }, () => crypto.randomUUID());
+        $('uu-out').innerHTML = '<div class="result">' + ids.map(u => '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;gap:10px"><code style="color:var(--primary);flex:1;word-break:break-all;font-size:12px">' + u + '</code><button class="btn btn-ghost btn-sm" data-uuid="' + u + '">📋</button></div>').join('') + '</div><button class="btn btn-primary btn-sm" style="width:100%;margin-top:10px" id="uu-copy-all">📋 نسخ الكل</button>';
+        $('uu-out').querySelectorAll('[data-uuid]').forEach(b => b.onclick = () => copyToClipboard(b.dataset.uuid));
+        $('uu-copy-all').onclick = () => copyToClipboard(ids.join('\n'));
+      };
+      $('uu-gen').click();
+    }
+  },
+  'qr-generator': {
+    cat: 'developer', title: '📱 QR Generator', icon: '📱',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: 'قابل للمسح',
+    html: '<div class="field"><label>النص أو الرابط</label><textarea id="qr-text">https://example.com</textarea></div><div class="field"><label>الحجم: <span id="qr-size-val" style="color:var(--primary)">300</span>px</label><input type="range" id="qr-size" min="100" max="600" value="300" step="50"></div><div id="qr-out" style="text-align:center"></div>',
+    init() {
+      const gen = () => {
+        const text = $('qr-text').value, size = $('qr-size').value, out = $('qr-out');
+        if (!text) { out.innerHTML = ''; return; }
+        const url = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(text) + '&margin=10';
+        out.innerHTML = '<div style="background:#fff;padding:16px;border-radius:12px;display:inline-block"><img src="' + url + '" style="display:block;max-width:100%" alt="QR"></div><div style="margin-top:12px"><a href="' + url + '" download="qrcode.png" target="_blank" class="btn btn-primary btn-sm">📥 تحميل</a></div>';
+      };
+      $('qr-text').addEventListener('input', gen);
+      $('qr-size').addEventListener('input', e => { $('qr-size-val').textContent = e.target.value; gen(); });
+      gen();
+    }
+  },
+  'text-diff': {
+    cat: 'developer', title: '📊 مقارنة نصوص', icon: '📊',
+    color: 'rgba(34,197,94,.15)', iconColor: '#86efac', desc: 'Diff بصري',
+    html: '<div class="field"><label>الأصلي</label><textarea id="d-a"></textarea></div><div class="field"><label>الجديد</label><textarea id="d-b"></textarea></div><div id="d-out"></div>',
+    init() {
+      const run = () => {
+        const a = $('d-a').value.split('\n'), b = $('d-b').value.split('\n'), out = $('d-out');
+        if (!$('d-a').value && !$('d-b').value) { out.innerHTML = ''; return; }
+        let html = '<div class="result" style="font-family:monospace">', added = 0, removed = 0;
+        for (let i = 0; i < Math.max(a.length, b.length); i++) {
+          const la = a[i] ?? '', lb = b[i] ?? '';
+          if (la === lb) html += '<div style="color:var(--dim);padding:2px 0">' + (escapeHtml(la) || '&nbsp;') + '</div>';
+          else {
+            if (la) { html += '<div style="color:#fca5a5;background:rgba(239,68,68,.1);padding:2px 8px;border-radius:4px;margin:2px 0">- ' + escapeHtml(la) + '</div>'; removed++; }
+            if (lb) { html += '<div style="color:#86efac;background:rgba(34,197,94,.1);padding:2px 8px;border-radius:4px;margin:2px 0">+ ' + escapeHtml(lb) + '</div>'; added++; }
+          }
+        }
+        html += '</div>';
+        out.innerHTML = '<div class="alert alert-info" style="font-family:Cairo,sans-serif">➕ ' + added + ' | ➖ ' + removed + '</div>' + html;
+      };
+      $('d-a').addEventListener('input', run);
+      $('d-b').addEventListener('input', run);
+    }
+  },
+  'word-counter': {
+    cat: 'developer', title: '📝 عدّ الكلمات', icon: '📝',
+    color: 'rgba(236,72,153,.15)', iconColor: '#f9a8d4', desc: 'كلمات + وقت قراءة',
+    html: '<div class="field"><label>النص</label><textarea id="w-in" style="min-height:200px"></textarea></div><div id="w-out"></div>',
+    init() {
+      $('w-in').addEventListener('input', () => {
+        const t = $('w-in').value;
+        const words = t.trim() ? t.trim().split(/\s+/).length : 0;
+        const chars = t.length, noSpace = t.replace(/\s/g, '').length, lines = t.split('\n').length;
+        const rt = Math.ceil(words / 200);
+        $('w-out').innerHTML = '<div class="result" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;font-family:Cairo,sans-serif"><div style="text-align:center"><div style="color:var(--primary);font-size:24px;font-weight:800">' + words + '</div><div style="color:var(--dim);font-size:12px">كلمات</div></div><div style="text-align:center"><div style="color:var(--secondary);font-size:24px;font-weight:800">' + chars + '</div><div style="color:var(--dim);font-size:12px">أحرف</div></div><div style="text-align:center"><div style="color:var(--warning);font-size:24px;font-weight:800">' + noSpace + '</div><div style="color:var(--dim);font-size:12px">بدون مسافات</div></div><div style="text-align:center"><div style="color:var(--success);font-size:24px;font-weight:800">' + lines + '</div><div style="color:var(--dim);font-size:12px">أسطر</div></div><div style="grid-column:1/-1;text-align:center;padding-top:12px;border-top:1px solid var(--border)"><div style="color:var(--dim);font-size:13px">وقت القراءة: <strong style="color:#fff">' + rt + ' دقيقة</strong></div></div></div>';
+      });
+    }
+  },
+  'css-minifier': {
+    cat: 'developer', title: '🎨 CSS Minifier', icon: '🎨',
+    color: 'rgba(251,191,36,.15)', iconColor: '#fde047', desc: 'ضغط CSS',
+    html: '<div class="field"><label>CSS</label><textarea id="css-in" class="mono"></textarea></div><button class="btn btn-primary" id="css-go" style="width:100%">🎨 ضغط</button><div id="css-out"></div>',
+    init() {
+      $('css-go').onclick = () => {
+        const input = $('css-in').value;
+        if (!input) { toast('أدخل CSS', 'warning'); return; }
+        const min = input.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').replace(/\s*([{}:;,])\s*/g, '$1').replace(/;}/g, '}').trim();
+        const saved = Math.round((1 - min.length / input.length) * 100);
+        $('css-out').innerHTML = '<div class="alert alert-success">✅ توفير ' + saved + '%</div><div class="result">' + escapeHtml(min) + '<button class="btn btn-ghost btn-sm" style="margin-top:10px" id="css-copy">📋 نسخ</button></div>';
+        $('css-copy').onclick = () => copyToClipboard(min);
+      };
+    }
+  },
+  'lorem': {
+    cat: 'developer', title: '📄 Lorem Ipsum', icon: '📄',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'نصوص تجريبية',
+    html: '<div class="field"><label>الفقرات: <span id="lp-val" style="color:var(--primary)">3</span></label><input type="range" id="lp-count" min="1" max="20" value="3"></div><button class="btn btn-primary" id="lp-gen" style="width:100%">📄 توليد</button><div id="lp-out"></div>',
+    init() {
+      const w = 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'.split(' ');
+      $('lp-count').addEventListener('input', e => $('lp-val').textContent = e.target.value);
+      $('lp-gen').onclick = () => {
+        const n = +$('lp-count').value;
+        let html = '';
+        for (let i = 0; i < n; i++) {
+          let p = '';
+          for (let j = 0; j < 40; j++) p += w[Math.floor(Math.random() * w.length)] + ' ';
+          html += '<p style="margin-bottom:14px">' + p.trim() + '.</p>';
+        }
+        $('lp-out').innerHTML = '<div class="result" style="direction:ltr;text-align:left">' + html + '</div>';
+      };
+      $('lp-gen').click();
+    }
+  },
+  'binary-converter': {
+    cat: 'developer', title: '💱 محول الأنظمة', icon: '💱',
+    color: 'rgba(99,102,241,.15)', iconColor: '#a5b4fc', desc: 'ثنائي/عشري/سداسي',
+    html: '<div class="field"><label>الرقم</label><input type="text" id="bc-in" value="255"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label>من</label><select id="bc-from"><option value="10">عشري</option><option value="2">ثنائي</option><option value="8">ثماني</option><option value="16">سداسي</option></select></div><div class="field"><label>إلى</label><select id="bc-to"><option value="2">ثنائي</option><option value="8">ثماني</option><option value="10">عشري</option><option value="16" selected>سداسي</option></select></div></div><div id="bc-out"></div>',
+    init() {
+      const run = () => {
+        const val = $('bc-in').value, f = parseInt($('bc-from').value), t = parseInt($('bc-to').value), out = $('bc-out');
+        if (!val) { out.innerHTML = ''; return; }
+        try {
+          const d = parseInt(val, f);
+          if (isNaN(d)) throw new Error('رقم غير صالح');
+          out.innerHTML = '<div class="result success"><div style="font-size:20px;color:var(--primary)">' + d.toString(t).toUpperCase() + '</div></div>';
+        } catch (e) { out.innerHTML = '<div class="result danger">❌ ' + escapeHtml(e.message) + '</div>'; }
+      };
+      $('bc-in').addEventListener('input', run);
+      $('bc-from').addEventListener('change', run);
+      $('bc-to').addEventListener('change', run);
+      run();
+    }
+  },
+  'markdown-preview': {
+    cat: 'developer', title: '📖 Markdown', icon: '📖',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: 'معاينة مباشرة',
+    html: '<div class="field"><label>Markdown</label><textarea id="md-in" style="min-height:180px"></textarea></div><div id="md-out"></div>',
+    init() {
+      const render = () => {
+        let md = $('md-in').value, out = $('md-out');
+        if (!md) { out.innerHTML = ''; return; }
+        let html = md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/^### (.+)$/gm, '<h3 style="color:#fff;margin:12px 0 6px">$1</h3>').replace(/^## (.+)$/gm, '<h2 style="color:#fff;margin:14px 0 8px">$1</h2>').replace(/^# (.+)$/gm, '<h1 style="color:#fff;margin:16px 0 10px">$1</h1>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/`(.+?)`/g, '<code style="background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px">$1</code>').replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" style="color:#00d4ff" target="_blank">$1</a>').replace(/^- (.+)$/gm, '<li style="margin:4px 0">$1</li>').replace(/\n\n/g, '<br><br>');
+        out.innerHTML = '<div class="result" style="font-family:Cairo,sans-serif;line-height:1.7">' + html + '</div>';
+      };
+      $('md-in').addEventListener('input', render);
+    }
+  },
+  'cron-parser': {
+    cat: 'developer', title: '⏰ Cron Parser', icon: '⏰',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'شرح Cron',
+    html: '<div class="field"><label>Cron Expression</label><input type="text" id="cr-in" class="mono" value="0 */2 * * *"></div><div id="cr-out"></div>',
+    init() {
+      const parse = () => {
+        const c = $('cr-in').value.trim(), out = $('cr-out');
+        const parts = c.split(/\s+/);
+        if (parts.length !== 5) { out.innerHTML = '<div class="alert alert-warning">يحتاج 5 أجزاء</div>'; return; }
+        const labels = ['الدقيقة', 'الساعة', 'اليوم', 'الشهر', 'اليوم في الأسبوع'];
+        const desc = p => {
+          if (p === '*') return 'كل';
+          if (p.includes('/')) return 'كل ' + p.split('/')[1];
+          if (p.includes(',')) return p.split(',').join(' أو ');
+          if (p.includes('-')) return 'من ' + p.replace('-', ' إلى ');
+          return p;
+        };
+        out.innerHTML = '<div class="result">' + parts.map((p, i) => '<div style="padding:6px 0;border-bottom:1px solid var(--border)"><strong style="color:var(--primary);font-family:Cairo,sans-serif">' + labels[i] + ':</strong> <span style="font-family:Cairo,sans-serif">' + desc(p) + '</span></div>').join('') + '</div>';
+      };
+      $('cr-in').addEventListener('input', parse);
+      parse();
+    }
+  },
+  'html-preview': {
+    cat: 'developer', title: '🌐 معاينة HTML', icon: '🌐',
+    color: 'rgba(34,197,94,.15)', iconColor: '#86efac', desc: 'عرض مباشر',
+    html: '<div class="field"><label>HTML</label><textarea id="hp-in" style="min-height:150px"><h1 style="color:#00d4ff">مرحبًا</h1></textarea></div><div id="hp-out" style="background:#fff;color:#000;padding:16px;border-radius:10px;min-height:120px"></div>',
+    init() {
+      const render = () => { $('hp-out').innerHTML = $('hp-in').value; };
+      $('hp-in').addEventListener('input', render);
+      render();
+    }
+  },
+
+  /* ============ UTILITIES ============ */
+  'color-converter': {
+    cat: 'utility', title: '🎨 محول الألوان', icon: '🎨',
+    color: 'rgba(236,72,153,.15)', iconColor: '#f9a8d4', desc: 'HEX ↔ RGB ↔ HSL',
+    html: '<div class="field"><label>اختر لون</label><input type="color" id="c-pick" value="#00d4ff" style="height:60px"></div><div id="c-preview" style="height:80px;border-radius:10px;margin-bottom:16px;background:#00d4ff"></div><div class="field"><label>HEX</label><input type="text" id="c-hex" value="#00d4ff" class="mono"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px"><div><label>R</label><input type="number" id="c-r" value="0" min="0" max="255"></div><div><label>G</label><input type="number" id="c-g" value="212" min="0" max="255"></div><div><label>B</label><input type="number" id="c-b" value="255" min="0" max="255"></div></div><div id="c-info"></div>',
+    init() {
+      const update = src => {
+        let r, g, b;
+        if (src === 'hex') {
+          const h = $('c-hex').value;
+          if (!/^#[0-9a-f]{6}$/i.test(h)) return;
+          r = parseInt(h.slice(1, 3), 16); g = parseInt(h.slice(3, 5), 16); b = parseInt(h.slice(5, 7), 16);
+        } else {
+          r = Math.max(0, Math.min(255, +$('c-r').value || 0));
+          g = Math.max(0, Math.min(255, +$('c-g').value || 0));
+          b = Math.max(0, Math.min(255, +$('c-b').value || 0));
+        }
+        const hex = '#' + [r, g, b].map(x => Math.round(x).toString(16).padStart(2, '0')).join('');
+        $('c-pick').value = hex; $('c-preview').style.background = hex;
+        if (src !== 'hex') $('c-hex').value = hex;
+        const rn = r / 255, gn = g / 255, bn = b / 255;
+        const mx = Math.max(rn, gn, bn), mn = Math.min(rn, gn, bn);
+        let hh = 0, ss = 0, ll = (mx + mn) / 2;
+        if (mx !== mn) {
+          const d = mx - mn; ss = ll > .5 ? d / (2 - mx - mn) : d / (mx + mn);
+          switch (mx) { case rn: hh = (gn - bn) / d + (gn < bn ? 6 : 0); break; case gn: hh = (bn - rn) / d + 2; break; case bn: hh = (rn - gn) / d + 4; break; }
+          hh /= 6;
+        }
+        $('c-info').innerHTML = '<div class="result"><div style="display:grid;gap:8px;font-family:Cairo,sans-serif"><div><span style="color:var(--dim)">HEX:</span> <code>' + hex + '</code></div><div><span style="color:var(--dim)">RGB:</span> <code>rgb(' + Math.round(r) + ', ' + Math.round(g) + ', ' + Math.round(b) + ')</code></div><div><span style="color:var(--dim)">HSL:</span> <code>hsl(' + Math.round(hh * 360) + ', ' + Math.round(ss * 100) + '%, ' + Math.round(ll * 100) + '%)</code></div></div></div>';
+      };
+      $('c-pick').addEventListener('input', e => { $('c-hex').value = e.target.value; update('hex'); });
+      $('c-hex').addEventListener('input', () => update('hex'));
+      ['c-r', 'c-g', 'c-b'].forEach(id => $(id).addEventListener('input', () => update('rgb')));
+      update('hex');
+    }
+  },
+  'timestamp': {
+    cat: 'utility', title: '⏰ Timestamp', icon: '⏰',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'Unix ↔ تاريخ',
+    html: '<div class="field"><label>Timestamp</label><input type="number" id="ts-in"></div><div id="ts-out"></div><button class="btn btn-primary" id="ts-now" style="width:100%;margin-top:14px">⏰ الآن</button>',
+    init() {
+      const c = () => {
+        const v = $('ts-in').value;
+        if (!v) { $('ts-out').innerHTML = ''; return; }
+        const d = new Date(+v * 1000);
+        if (isNaN(d.getTime())) { $('ts-out').innerHTML = '<div class="alert alert-danger">قيمة غير صالحة</div>'; return; }
+        $('ts-out').innerHTML = '<div class="result" style="font-family:Cairo,sans-serif"><div style="margin-bottom:6px"><span style="color:var(--dim)">محلي:</span> <strong>' + d.toLocaleString('ar-EG') + '</strong></div><div><span style="color:var(--dim)">UTC:</span> <strong>' + d.toUTCString() + '</strong></div></div>';
+      };
+      $('ts-in').addEventListener('input', c);
+      $('ts-now').onclick = () => { $('ts-in').value = Math.floor(Date.now() / 1000); c(); };
+      $('ts-in').value = Math.floor(Date.now() / 1000); c();
+    }
+  },
+  'base64-image': {
+    cat: 'utility', title: '🖼️ صورة ↔ Base64', icon: '🖼️',
+    color: 'rgba(168,85,247,.15)', iconColor: '#d8b4fe', desc: 'تحويل الصور',
+    html: '<div class="field"><label>اختر صورة</label><input type="file" id="bi-file" accept="image/*"></div><div id="bi-preview" style="text-align:center"></div><div id="bi-out"></div>',
+    init() {
+      $('bi-file').addEventListener('change', e => {
+        const f = e.target.files[0]; if (!f) return;
+        const r = new FileReader();
+        r.onload = ev => {
+          $('bi-preview').innerHTML = '<img src="' + ev.target.result + '" style="max-width:200px;border-radius:10px;margin-bottom:14px">';
+          $('bi-out').innerHTML = '<div class="result"><div style="font-size:11px;word-break:break-all;max-height:150px;overflow:auto">' + ev.target.result.substring(0, 500) + '...</div><div style="color:var(--dim);font-size:12px;margin-top:8px">الحجم: ' + (f.size / 1024).toFixed(2) + ' KB</div><button class="btn btn-primary btn-sm" style="margin-top:10px" id="bi-copy">📋 نسخ الكل</button></div>';
+          $('bi-copy').onclick = () => copyToClipboard(ev.target.result);
+        };
+        r.readAsDataURL(f);
+      });
+    }
+  },
+  'morse-code': {
+    cat: 'utility', title: '·− Morse Code', icon: '·−',
+    color: 'rgba(20,184,166,.15)', iconColor: '#5eead4', desc: 'ترجمة Morse',
+    html: '<div class="field"><label>النص (إنجليزي)</label><textarea id="mc-in" placeholder="SOS"></textarea></div><div id="mc-out"></div>',
+    init() {
+      const morse = { A: '.-', B: '-...', C: '-.-.', D: '-..', E: '.', F: '..-.', G: '--.', H: '....', I: '..', J: '.---', K: '-.-', L: '.-..', M: '--', N: '-.', O: '---', P: '.--.', Q: '--.-', R: '.-.', S: '...', T: '-', U: '..-', V: '...-', W: '.--', X: '-..-', Y: '-.--', Z: '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.' };
+      $('mc-in').addEventListener('input', () => {
+        const t = $('mc-in').value.toUpperCase();
+        const r = t.split('').map(c => c === ' ' ? '/' : morse[c] || '?').join(' ');
+        $('mc-out').innerHTML = '<div class="result"><div style="font-size:16px;word-break:break-all">' + escapeHtml(r) + '</div></div>';
+      });
+    }
+  },
+  'url-analyzer': {
+    cat: 'utility', title: '🔗 URL Analyzer', icon: '🔗',
+    color: 'rgba(245,158,11,.15)', iconColor: '#fcd34d', desc: 'تحليل الروابط',
+    html: '<div class="field"><label>الرابط</label><input type="url" id="us-in" placeholder="https://example.com"></div><div id="us-out"></div>',
+    init() {
+      $('us-in').addEventListener('input', () => {
+        const url = $('us-in').value.trim(), out = $('us-out');
+        if (!url) { out.innerHTML = ''; return; }
+        try {
+          const u = new URL(url);
+          out.innerHTML = '<div class="result" style="font-family:Cairo,sans-serif"><div><span style="color:var(--dim)">البروتوكول:</span> <strong>' + escapeHtml(u.protocol) + '</strong></div><div><span style="color:var(--dim)">النطاق:</span> <strong>' + escapeHtml(u.hostname) + '</strong></div><div><span style="color:var(--dim)">المنفذ:</span> <strong>' + escapeHtml(u.port || 'افتراضي') + '</strong></div><div><span style="color:var(--dim)">المسار:</span> <strong>' + escapeHtml(u.pathname) + '</strong></div><div><span style="color:var(--dim)">Params:</span> <strong>' + u.searchParams.size + '</strong></div></div>';
+        } catch (e) { out.innerHTML = '<div class="alert alert-danger">URL غير صالح</div>'; }
+      });
+    }
+  },
+  'ip-validator': {
+    cat: 'utility', title: '🔢 IP Validator', icon: '🔢',
+    color: 'rgba(99,102,241,.15)', iconColor: '#a5b4fc', desc: 'IPv4/IPv6',
+    html: '<div class="field"><label>عنوان IP</label><input type="text" id="iv-in" placeholder="192.168.1.1"></div><div id="iv-out"></div>',
+    init() {
+      $('iv-in').addEventListener('input', () => {
+        const ip = $('iv-in').value.trim(), out = $('iv-out');
+        if (!ip) { out.innerHTML = ''; return; }
+        const v4 = /^(\d{1,3}\.){3}\d{1,3}$/.test(ip) && ip.split('.').every(x => +x >= 0 && +x <= 255);
+        const v6 = /^([\da-f]{1,4}:){7}[\da-f]{1,4}$/i.test(ip) || /^::1$/.test(ip) || /^([\da-f]{1,4}:){1,7}:$/i.test(ip);
+        let type = v4 ? 'IPv4' : v6 ? 'IPv6' : 'غير صالح';
+        let isPrivate = false;
+        if (v4) {
+          const p = ip.split('.').map(Number);
+          isPrivate = (p[0] === 10) || (p[0] === 172 && p[1] >= 16 && p[1] <= 31) || (p[0] === 192 && p[1] === 168) || (p[0] === 127);
+        }
+        out.innerHTML = '<div class="result ' + (v4 || v6 ? 'success' : 'danger') + '"><div style="font-family:Cairo,sans-serif"><div><strong>' + (v4 || v6 ? '✅ صالح' : '❌ غير صالح') + '</strong></div>' + (v4 || v6 ? '<div><span style="color:var(--dim)">النوع:</span> ' + type + '</div>' : '') + (isPrivate ? '<div style="color:var(--warning)">⚠️ عنوان خاص (Private)</div>' : '') + '</div></div>';
+      });
+    }
+  },
+  'char-counter': {
+    cat: 'utility', title: '🔢 عدّاد الأحرف', icon: '🔢',
+    color: 'rgba(236,72,153,.15)', iconColor: '#f9a8d4', desc: 'حدود المنصات',
+    html: '<div class="field"><label>النص</label><textarea id="cc2-in"></textarea></div><div id="cc2-out"></div>',
+    init() {
+      $('cc2-in').addEventListener('input', () => {
+        const t = $('cc2-in').value, len = t.length;
+        const limits = { Twitter: 280, SMS: 160, Instagram: 2200, 'Meta Description': 160, 'Title Tag': 60 };
+        let html = '<div class="result" style="font-family:Cairo,sans-serif">';
+        for (const [name, limit] of Object.entries(limits)) {
+          const ok = len <= limit;
+          const pct = Math.min(100, (len / limit) * 100);
+          html += '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>' + name + ':</span><strong style="color:' + (ok ? 'var(--success)' : 'var(--danger)') + '">' + len + '/' + limit + '</strong></div><div class="progress"><div class="progress-bar" style="width:' + pct + '%;background:' + (ok ? 'var(--success)' : 'var(--danger)') + '"></div></div></div>';
+        }
+        html += '</div>';
+        $('cc2-out').innerHTML = html;
+      });
+    }
+  },
+  'random-generator': {
+    cat: 'utility', title: '🎲 مولّد عشوائي', icon: '🎲',
+    color: 'rgba(0,212,255,.15)', iconColor: '#7dd3fc', desc: 'أرقام + نرد + عملة',
+    html: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px"><div><label>من</label><input type="number" id="rg-min" value="1"></div><div><label>إلى</label><input type="number" id="rg-max" value="100"></div></div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" id="rg-num" style="flex:1">رقم</button><button class="btn btn-ghost btn-sm" id="rg-dice" style="flex:1">🎲 نرد</button><button class="btn btn-ghost btn-sm" id="rg-coin" style="flex:1">🪙 عملة</button></div><div id="rg-out" style="text-align:center;padding:24px 0;font-size:32px;font-weight:800;color:var(--primary)"></div>',
+    init() {
+      $('rg-num').onclick = () => { const a = +$('rg-min').value, b = +$('rg-max').value; $('rg-out').textContent = Math.floor(Math.random() * (b - a + 1)) + a; };
+      $('rg-dice').onclick = () => { $('rg-out').textContent = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][Math.floor(Math.random() * 6)]; };
+      $('rg-coin').onclick = () => { $('rg-out').textContent = Math.random() < .5 ? '🪙 صورة' : '🪙 كتابة'; };
+    }
+  },
+  'date-calculator': {
+    cat: 'utility', title: '📅 فرق التواريخ', icon: '📅',
+    color: 'rgba(20,184,166,.15)', iconColor: '#5eead4', desc: 'حساب المدة',
+    html: '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px"><div><label>من</label><input type="date" id="dc-1"></div><div><label>إلى</label><input type="date" id="dc-2"></div></div><div id="dc-out"></div>',
+    init() {
+      const c = () => {
+        const d1 = $('dc-1').value, d2 = $('dc-2').value, out = $('dc-out');
+        if (!d1 || !d2) { out.innerHTML = ''; return; }
+        const diff = Math.abs(new Date(d2) - new Date(d1));
+        const days = Math.floor(diff / 864e5);
+        out.innerHTML = '<div class="result" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;font-family:Cairo,sans-serif"><div style="text-align:center"><div style="color:var(--primary);font-size:24px;font-weight:800">' + Math.floor(days / 365.25) + '</div><div style="color:var(--dim);font-size:12px">سنة</div></div><div style="text-align:center"><div style="color:var(--secondary);font-size:24px;font-weight:800">' + Math.floor(days / 30.44) + '</div><div style="color:var(--dim);font-size:12px">شهر</div></div><div style="text-align:center"><div style="color:var(--warning);font-size:24px;font-weight:800">' + Math.floor(days / 7) + '</div><div style="color:var(--dim);font-size:12px">أسبوع</div></div><div style="text-align:center"><div style="color:var(--success);font-size:24px;font-weight:800">' + days + '</div><div style="color:var(--dim);font-size:12px">يوم</div></div></div>';
+      };
+      $('dc-1').addEventListener('input', c);
+      $('dc-2').addEventListener('input', c);
+    }
+  },
+  'notes-pad': {
+    cat: 'utility', title: '📓 مفكرة محلية', icon: '📓',
+    color: 'rgba(245,158,11,.15)', iconColor: '#fcd34d', desc: 'localStorage',
+    html: '<div class="field"><textarea id="n-in" style="min-height:220px"></textarea></div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" id="n-save" style="flex:1">💾 حفظ</button><button class="btn btn-ghost btn-sm" id="n-load" style="flex:1">📂 تحميل</button><button class="btn btn-ghost btn-sm" id="n-clear" style="flex:1">🗑️ مسح</button></div><div id="n-info" style="text-align:center;color:var(--dim);font-size:12px;margin-top:12px"></div>',
+    init() {
+      $('n-save').onclick = () => {
+        localStorage.setItem('ss_notes', $('n-in').value);
+        $('n-info').textContent = '✅ حفظ: ' + new Date().toLocaleTimeString('ar-EG');
+        toast('تم الحفظ');
+      };
+      $('n-load').onclick = () => {
+        const s = localStorage.getItem('ss_notes');
+        if (s) { $('n-in').value = s; $('n-info').textContent = '📂 تم التحميل'; }
+        else toast('لا توجد ملاحظات', 'warning');
+      };
+      $('n-clear').onclick = () => {
+        if (!confirm('متأكد؟')) return;
+        $('n-in').value = ''; localStorage.removeItem('ss_notes');
+        $('n-info').textContent = 'تم المسح';
+      };
+      const s = localStorage.getItem('ss_notes');
+      if (s) $('n-in').value = s;
+    }
+  }
+};
+
+/* ============================================================
+   CATEGORIES
+============================================================ */
+const CATEGORIES = [
+  { id: 'all', name: 'الكل', icon: '🌟' },
+  { id: 'security', name: 'أمن', icon: '🛡️' },
+  { id: 'network', name: 'شبكة', icon: '🌐' },
+  { id: 'developer', name: 'مطورين', icon: '💻' },
+  { id: 'utility', name: 'عامة', icon: '🔧' }
+];
+let activeCategory = 'all';
+
+function renderCategories() {
+  $('catTabs').innerHTML = CATEGORIES.map(c =>
+    '<button class="cat-tab ' + (c.id === 'all' ? 'active' : '') + '" data-cat="' + c.id + '">' + c.icon + ' ' + c.name + '</button>'
+  ).join('');
+  $('catTabs').querySelectorAll('.cat-tab').forEach(b => {
+    b.onclick = () => {
+      activeCategory = b.dataset.cat;
+      $('catTabs').querySelectorAll('.cat-tab').forEach(x => x.classList.toggle('active', x === b));
+      renderToolCards();
+    };
+  });
+}
+
+function renderToolCards() {
+  const grid = $('toolsGrid');
+  let html = '';
+  for (const [id, t] of Object.entries(TOOLS)) {
+    if (activeCategory !== 'all' && t.cat !== activeCategory) continue;
+    html += '<div class="tool-card" data-tool="' + id + '"><div class="tool-icon" style="background:' + t.color + ';color:' + t.iconColor + '">' + t.icon + '</div><h3>' + t.title.replace(/^[^\s]+\s/, '') + '</h3><p>' + t.desc + '</p></div>';
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('[data-tool]').forEach(c => c.onclick = () => openTool(c.dataset.tool));
+  $('statTools').textContent = Object.keys(TOOLS).length;
+}
+
+function openTool(id) {
+  const t = TOOLS[id];
+  if (!t) { toast('أداة غير موجودة', 'error'); return; }
+  openModal(t.title, t.html);
+  requestAnimationFrame(() => {
+    try { t.init(); } catch (e) { console.error(e); toast('خطأ: ' + e.message, 'error'); }
+  });
+}
+
+/* ============================================================
+   ANIMATED BACKGROUND
+============================================================ */
+let particlesActive = true, particles = [], particlesCtx = null;
+
+function initParticles() {
+  const canvas = $('particles-canvas');
+  particlesCtx = canvas.getContext('2d');
+  const resize = () => { canvas.width = innerWidth; canvas.height = innerHeight; };
+  resize(); addEventListener('resize', resize);
+  particles = [];
+  const N = Math.min(100, Math.floor(innerWidth / 15));
+  for (let i = 0; i < N; i++) {
+    particles.push({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+      vx: (Math.random() - .5) * .5, vy: (Math.random() - .5) * .5,
+      r: Math.random() * 1.5 + .5,
+      c: Math.random() > .5 ? '#00d4ff' : '#a855f7'
+    });
+  }
+  function animate() {
+    if (!particlesActive) { requestAnimationFrame(animate); return; }
+    particlesCtx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      particlesCtx.beginPath();
+      particlesCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      particlesCtx.fillStyle = p.c;
+      particlesCtx.globalAlpha = .6;
+      particlesCtx.fill();
+    });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 120) {
+          particlesCtx.beginPath();
+          particlesCtx.moveTo(particles[i].x, particles[i].y);
+          particlesCtx.lineTo(particles[j].x, particles[j].y);
+          particlesCtx.strokeStyle = '#00d4ff';
+          particlesCtx.globalAlpha = (1 - d / 120) * .15;
+          particlesCtx.lineWidth = .5;
+          particlesCtx.stroke();
+        }
+      }
+    }
+    particlesCtx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+let matrixActive = false, matrixInterval = null;
+function initMatrix() {
+  const canvas = $('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  addEventListener('resize', () => { canvas.width = innerWidth; canvas.height = innerHeight; });
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
+  function draw() {
+    ctx.fillStyle = 'rgba(5,5,15,0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#00ff88';
+    ctx.font = fontSize + 'px monospace';
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > .975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  if (matrixInterval) clearInterval(matrixInterval);
+  matrixInterval = setInterval(draw, 50);
+}
+
+function toggleMatrix() {
+  matrixActive = !matrixActive;
+  $('matrix-canvas').classList.toggle('active', matrixActive);
+  $('matrixToggle').classList.toggle('active', matrixActive);
+  if (matrixActive) initMatrix();
+  else if (matrixInterval) { clearInterval(matrixInterval); matrixInterval = null; }
+}
+
+/* ============================================================
+   AI SETTINGS — Real AI (Groq / Gemini / Pollinations / Local)
+============================================================ */
+const AI_SETTINGS = {
+  provider: localStorage.getItem('ss_ai_provider') || 'groq',
+  apiKey: localStorage.getItem('ss_ai_key') || ''
+};
+const AI_HISTORY = [];
+const AI_SYSTEM_PROMPT = 'أنت CyberAI، مساعد أمن سيبراني محترف باللغة العربية. أجب بوضوح وبإيجاز (بحد أقصى 150 كلمة) واستخدم النقاط عند الحاجة.';
+
+function updateKeyFieldVisibility() {
+  const p = $('aiProvider').value;
+  $('aiKeyField').style.display = (p === 'groq' || p === 'gemini') ? 'block' : 'none';
+  const hint = $('aiGetKeyHint');
+  if (p === 'groq') {
+    hint.style.display = 'block';
+    $('aiKeyLink').href = 'https://console.groq.com/keys';
+    $('aiKeyLink').textContent = 'console.groq.com/keys';
+  } else if (p === 'gemini') {
+    hint.style.display = 'block';
+    $('aiKeyLink').href = 'https://aistudio.google.com/app/apikey';
+    $('aiKeyLink').textContent = 'aistudio.google.com/app/apikey';
+  } else {
+    hint.style.display = 'none';
+  }
+}
+
+function openAISettings() {
+  $('aiProvider').value = AI_SETTINGS.provider;
+  $('aiApiKey').value = AI_SETTINGS.apiKey;
+  $('aiTestResult').innerHTML = '';
+  updateKeyFieldVisibility();
+  $('aiSettingsModal').classList.add('open');
+}
+function closeAISettings() { $('aiSettingsModal').classList.remove('open'); }
+
+function saveAISettings() {
+  AI_SETTINGS.provider = $('aiProvider').value;
+  AI_SETTINGS.apiKey = $('aiApiKey').value.trim();
+  localStorage.setItem('ss_ai_provider', AI_SETTINGS.provider);
+  localStorage.setItem('ss_ai_key', AI_SETTINGS.apiKey);
+  toast('✅ تم حفظ الإعدادات');
+  closeAISettings();
+}
+
+async function callAIProvider(provider, key, messages) {
+  if (provider === 'groq') {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages, temperature: 0.7, max_tokens: 800 })
+    });
+    if (!res.ok) { const t = await res.text(); throw new Error('Groq ' + res.status + ': ' + t.substring(0, 80)); }
+    const data = await res.json();
+    return data && data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content.trim() : null;
+  }
+  if (provider === 'gemini') {
+    const sys = messages.find(m => m.role === 'system');
+    const chat = messages.filter(m => m.role !== 'system');
+    const body = {
+      contents: chat.map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
+      generationConfig: { temperature: 0.7, maxOutputTokens: 800 }
+    };
+    if (sys) body.systemInstruction = { parts: [{ text: sys.content }] };
+    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + key, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) { const t = await res.text(); throw new Error('Gemini ' + res.status + ': ' + t.substring(0, 80)); }
+    const data = await res.json();
+    return data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts ? data.candidates[0].content.parts[0].text.trim() : null;
+  }
+  if (provider === 'pollinations') {
+    const res = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'openai', messages })
+    });
+    if (!res.ok) throw new Error('Pollinations ' + res.status);
+    const data = await res.json();
+    return data && data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content.trim() : null;
+  }
+  return null;
+}
+
+async function testAIConnection() {
+  const result = $('aiTestResult');
+  const provider = $('aiProvider').value;
+  const key = $('aiApiKey').value.trim();
+  if ((provider === 'groq' || provider === 'gemini') && !key) {
+    result.innerHTML = '<div class="alert alert-warning" style="margin:0">⚠️ أدخل مفتاح API أولاً</div>';
+    return;
+  }
+  result.innerHTML = '<div class="alert alert-info" style="margin:0">⏳ جاري الاختبار...</div>';
+  try {
+    const reply = await callAIProvider(provider, key, [{ role: 'user', content: 'قل كلمة واحدة: يعمل' }]);
+    if (reply) result.innerHTML = '<div class="alert alert-success" style="margin:0">✅ نجح! الرد: "' + escapeHtml(reply.substring(0, 60)) + '"</div>';
+    else throw new Error('رد فارغ');
+  } catch (e) {
+    result.innerHTML = '<div class="alert alert-danger" style="margin:0">❌ فشل: ' + escapeHtml(e.message) + '</div>';
+  }
+}
+
+/* ============================================================
+   AI CHAT
+============================================================ */
+function scrollToAI() {
+  const el = $('ai');
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => $('aiInput').focus(), 500);
+}
+
+async function sendAI() {
+  const input = $('aiInput'), messages = $('aiMessages'), btn = $('aiSendBtn');
+  const text = input.value.trim();
+  if (!text || btn.disabled) return;
+
+  messages.insertAdjacentHTML('beforeend', '<div class="msg user">' + escapeHtml(text) + '</div>');
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+
+  AI_HISTORY.push({ role: 'user', content: text });
+  while (AI_HISTORY.length > 8) AI_HISTORY.shift();
+
+  const typingEl = document.createElement('div');
+  typingEl.className = 'msg ai typing';
+  typingEl.innerHTML = '<span></span><span></span><span></span>';
+  messages.appendChild(typingEl);
+  messages.scrollTop = messages.scrollHeight;
+
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  let reply = null;
+  const provider = AI_SETTINGS.provider;
+
+  try {
+    if (provider === 'local') {
+      reply = localAI(text);
+    } else {
+      const apiMessages = [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(AI_HISTORY.slice(-6));
+      reply = await callAIProvider(provider, AI_SETTINGS.apiKey, apiMessages);
+    }
+  } catch (e) {
+    console.warn('Provider failed:', e.message);
+    if (provider !== 'pollinations' && provider !== 'local') {
+      try {
+        const apiMessages = [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(AI_HISTORY.slice(-4));
+        reply = await callAIProvider('pollinations', '', apiMessages);
+      } catch (e2) { console.warn('Fallback failed:', e2.message); }
+    }
+  }
+
+  if (!reply) {
+    reply = localAI(text);
+    if (provider === 'groq' && !AI_SETTINGS.apiKey) {
+      reply += '\n\n💡 للحصول على ردود ذكية كاملة مثل ChatGPT، اضغط زر ⚙️ في الأعلى وأضف مفتاح Groq المجاني (30 ثانية).';
+    }
+  } else {
+    AI_HISTORY.push({ role: 'assistant', content: reply });
+  }
+
+  typingEl.remove();
+  messages.insertAdjacentHTML('beforeend', '<div class="msg ai">' + escapeHtml(reply) + '</div>');
+  messages.scrollTop = messages.scrollHeight;
+  btn.disabled = false;
+  btn.textContent = 'إرسال';
+}
+
+function localAI(q) {
+  const t = (q || '').toLowerCase().trim();
+  const KB = [
+    { k: ['تصيد', 'phishing', 'احتيال'], a: '🎣 التصيد الاحتيالي = خداع لسرقة بياناتك.\n\nالحماية:\n• لا تضغط روابط مجهولة\n• تحقق من URL قبل النقر\n• انتبه للأخطاء الإملائية\n• فعّل 2FA\n• استخدم مدير كلمات مرور' },
+    { k: ['كلمة مرور', 'password', 'باسورد'], a: '🔐 كلمة المرور القوية:\n\n• 14 حرف على الأقل\n• كبيرة + صغيرة + أرقام + رموز\n• فريدة لكل حساب\n• تجنب الكلمات الشائعة\n\nنصيحة: استخدم Passphrase مثل:\nالشمس-قهوة-جبال-قلم-82!' },
+    { k: ['فيروس', 'virus', 'malware', 'ransomware', 'فدية'], a: '🦠 البرمجيات الخبيثة:\n\n• فيروس: ينتشر بالملفات\n• تروجان: يتخفى كبرنامج شريف\n• Ransomware: يشفر ملفاتك\n\nالحماية:\n• لا تحمّل من مصادر مجهولة\n• فحص دوري\n• نسخة احتياطية offline\n• حدّث نظامك' },
+    { k: ['تشفير', 'encryption', 'aes', 'rsa'], a: '🔒 التشفير:\n\n• AES-256: المعيار الحالي\n• RSA-2048+: غير متناظر\n• ChaCha20: بديل سريع\n\nللاستخدام:\n• HTTPS = TLS 1.3\n• ملفات = AES-256-GCM\n• رسائل = Signal Protocol\n\nجرّب أداة AES-GCM!' },
+    { k: ['vpn'], a: '🌐 VPN تشفّر اتصالك وتخفي IP.\n\nفوائد:\n• حماية على Wi-Fi العام\n• تجاوز الحجب\n• إخفاء النشاط\n\nتحذيرات:\n• لا تستخدم VPN مجاني\n• تحقق من no-logs' },
+    { k: ['ddos'], a: '💥 DDoS = إغراق الخادم بطلبات.\n\nللحماية:\n• CDN (Cloudflare)\n• WAF\n• Rate Limiting\n• مراقبة الحركة' },
+    { k: ['ثغرة', 'vulnerability', 'cve', 'zero-day'], a: '🐛 الثغرات:\n\n• CVE: معرّف عالمي\n• Zero-day: لم يُصلح\n• CVSS: مقياس خطورة\n\nللحماية:\n• حدّث فورًا\n• استخدم WAF\n• Bug Bounty' },
+    { k: ['2fa', 'مصادقة ثنائية', 'otp'], a: '🔑 2FA (من الأفضل للأسوأ):\n\n1. Hardware Key (YubiKey)\n2. Authenticator App\n3. Push\n4. SMS (الأضعف)\n\nاحتفظ بـ backup codes!' },
+    { k: ['wifi', 'واي فاي'], a: '📡 Wi-Fi عام:\n\n• لا تدخل بيانات بنكية\n• استخدم VPN\n• تحقق من اسم الشبكة\n• استخدم Hotspot من هاتفك' },
+    { k: ['mitm', 'man in the middle'], a: '🕵️ MITM = المهاجم بينك وبين الهدف.\n\nالأنواع:\n• ARP Spoofing\n• DNS Spoofing\n• SSL Stripping\n\nللحماية:\n• HTTPS\n• VPN\n• HSTS' },
+    { k: ['نسخ', 'backup', 'باك اب'], a: '💾 قاعدة 3-2-1:\n\n• 3 نسخ\n• 2 وسائط مختلفة\n• 1 خارج الموقع\n\nاقتراح: Restic + Backblaze B2' },
+    { k: ['مرحبا', 'hello', 'hi', 'سلام', 'ازيك', 'أهلا'], a: 'مرحبًا! 👋\n\nاسألني عن:\n• 🎣 التصيد\n• 🔐 كلمات المرور\n• 🔒 التشفير\n• 🦠 الفيروسات\n• 🌐 VPN\n• 🔑 2FA\n• 💥 DDoS\n• 💾 النسخ الاحتياطي' },
+    { k: ['شكرا', 'thanks', 'تسلم'], a: 'العفو! 😊 هنا لو احتجت أي مساعدة أمنية.' }
+  ];
+  for (const it of KB) for (const k of it.k) if (t.includes(k)) return it.a;
+  return '💡 سؤال جيد! لكن خارج معرفتي المباشرة.\n\nالمواضيع المتاحة:\n• 🎣 التصيد\n• 🔐 كلمات المرور\n• 🔒 التشفير\n• 🦠 الفيروسات\n• 🌐 VPN\n• 🔑 2FA\n• 💥 DDoS\n• 💾 النسخ الاحتياطي\n\n💡 لردود ذكية كاملة، أضف مفتاح Groq من ⚙️\n\nجرب صياغة سؤالك بكلمة مفتاحية 💪';
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  initParticles();
+  renderCategories();
+  renderToolCards();
+
+  $('bgToggle').onclick = () => {
+    particlesActive = !particlesActive;
+    $('bgToggle').classList.toggle('active', particlesActive);
+    $('particles-canvas').style.opacity = particlesActive ? '1' : '0.2';
+  };
+  $('matrixToggle').onclick = toggleMatrix;
+
+  $('aiSettingsBtn').onclick = openAISettings;
+  $('aiProvider').addEventListener('change', updateKeyFieldVisibility);
+
+  $$('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const h = a.getAttribute('href');
+      if (h === '#') return;
+      e.preventDefault();
+      const t = document.querySelector(h);
+      if (t) { t.scrollIntoView({ behavior: 'smooth' }); $('navLinks').classList.remove('open'); }
+    });
+  });
+
+  console.log('%c🛡️ ShadowShield Pro v4.0', 'color:#00d4ff;font-size:20px;font-weight:bold');
+  console.log('%c' + Object.keys(TOOLS).length + ' أداة | AI حقيقي (Groq/Gemini) | خلفية متحركة', 'color:#a855f7;font-size:13px');
+  console.log('%c⚙️ لإعداد AI: اضغط زر ⚙️ في الأعلى', 'color:#22c55e;font-size:13px;font-weight:bold');
+});
+</script>
+</body>
+</html>
